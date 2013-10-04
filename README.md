@@ -22,7 +22,7 @@ $css('body > div')             // select all <div> nodes that are a child of <bo
 $css('div > p:nth-child(3n)')  // select every 3rd <p> node of each <div> node
 ```
 
-More information:
+For more information on CSS selectors:
 * [W3Schools Selector Reference](http://www.w3schools.com/cssref/css_selectors.asp)
 * [MDN reference on :pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes)
 * [The W3C Selector Level 3 Spec](http://www.w3.org/TR/css3-selectors/)
