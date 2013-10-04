@@ -9,9 +9,9 @@ CSSAssist uses the CSS selector rule syntax for selecting DOM elements.
 ```javascript
 $css()                         // select nothing
 $css('*')                      // select all nodes in the document
-$css('p.myAwesomeClass')       // select all <p> nodes with the class .myAwesomeClass
-$css('body > div')             // select all <div> nodes that are a child of <body>
-$css('div > p:nth-child(3n)')  // select every 3rd <p> node of each <div> node
+$css('p.myAwesomeClass')       // select all &lt;p&gt; nodes with the class .myAwesomeClass
+$css('body > div')             // select all &lt;div&gt; nodes that are a child of <body>
+$css('div > p:nth-child(3n)')  // select every 3rd &lt;p&gt; node of each &lt;div&gt; node
 ```
 Methods
 =========
@@ -22,35 +22,35 @@ The hasClass() method return true if and only if each node in the context has ea
 ```javascript
 $css('div').hasClass('myAwesomeClass')
 ```
-returns true if and only if ALL <div> nodes have the class "myAwesomeClass".
+returns true if and only if ALL &lt;div&gt; nodes have the class "myAwesomeClass".
 addClass(classList)
 --------------------
 The addClass() method adds each class in classList to each node in the context. For example,
 ```javascript
 $css('div').addClass('myAwesomeClass')
 ```
-adds the class "myAwesomeClass" to every <div> in the document.
+adds the class "myAwesomeClass" to every &lt;div&gt; in the document.
 removeClass(classList)
 -----------------------
 The removeClass() method removes each class in classList from each node in the context. For example,
 ```javascript
 $css('div').removeClass('myAwesomeClass')
 ```
-removes the class "myAwesomeClass" from every <div> in the document.
+removes the class "myAwesomeClass" from every &lt;div&gt; in the document.
 toggleClass(classList)
 ----------------------
 The toggleClass() method toggles each class in classList for each node in the context. For example,
 ```javascript
 $css('div').toggleClass('myAwesomeClass')
 ```
-would add the class "myAwesomeClass" to every <div> which did not already contain it and remove "myAwesomeClass" from every <div> node that has it.
+would add the class "myAwesomeClass" to every &lt;div&gt; which did not already contain it and remove "myAwesomeClass" from every &lt;div&gt; node that has it.
 clearAttr(attrList)
 ---------------------
 The clearAttr() method removes each attribute in attrList from each node in the context.  For example,
 ```javascript
 $css('div').clearAttr('class style');
 ```
-would remove the "class" and "style" attributes from every <div> node in the document.
+would remove the "class" and "style" attributes from every &lt;div&gt; node in the document.
 loadCSSLink(url)
 -----------------
 The loadCSSLink() method loads an external CSS file (referenced by url).  The context is not relevant.  For example,
