@@ -19,6 +19,7 @@
  *
  * CSSAssist provides a minimal set of methods for working with CSS
  * Browser support is limited by the availability of querySelector (http://caniuse.com/queryselector)
+ *            and add/removeEventListener (ie9+)
  */
 (function (window, undefined) {
 
@@ -153,8 +154,6 @@
                 toggleClass: function (classList) {
                         if (classList) {
                                 var classArray = this.makeArray(classList);
-
-
                                 for (var i = 0; i < this.length; ++i) {
                                         for (var j = 0; j < classArray.length; ++j) {
                                                 if (css(this[i]).hasClass(classArray[j])) {
@@ -213,11 +212,35 @@
                                 var head = document.getElementsByTagName('head')[0];
                                 var styleNode = document.createElement('style');
                                 styleNode.type = 'text/css';
-
                                 if (styleNode.styleSheet) styleNode.styleSheet.cssText = styles;
                                 else styleNode.appendChild(document.createTextNode(styles));
-
                                 head.appendChild(styleNode);
+                        }
+                        return this;
+                },
+
+                /**
+                 * Add an event listener to each node in context
+                 */
+                addEventListener: function(type, listener, useCapture) {
+                        if (type && listener) {
+                                if (typeof useCapture === "undefined") {useCapture = false;}
+                                for (var i = 0; i < this.length; ++i) {
+                                    this[i].addEventListener(type, listener, useCapture);
+                                }
+                        }
+                        return this;
+                },
+
+                /**
+                 * Remove an event listener from each node in context
+                 */
+                removeEventListener: function(type, listener, useCapture) {
+                        if (type && listener) {
+                                if (typeof useCapture === "undefined") {useCapture = false;}
+                                for (var i = 0; i < this.length; ++i) {
+                                    this[i].removeEventListener(type, listener, useCapture);
+                                }
                         }
                         return this;
                 }
