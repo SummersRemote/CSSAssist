@@ -2,7 +2,9 @@ CSSAssist
 =========
 
 CSSAssist is a small (<2kb) JavaScript library for working with CSS.
+
 > It is amazing what you can do with a simple responsive grid and a handful of JavaScript methods!
+
 I am a long standing fan of [jQuery](http://jquery.com/) and more recently [AngularJS](http://angularjs.org/) and frequently rely on them.  I have, however, come to realize that there are times when they are simply too much and that I desire a smaller library and smaller footprint.  CSSAssist provides methods for working with stylesheets. Period.  It does NOT provide methods for manipulating the style attribute on a node, append/prepend text/html, ajax, binding, etc. - if you need those things, I highly recommend [jQuery](http://jquery.com/) or [AngularJS](http://angularjs.org/).
 
 Support is [limited to browsers](http://caniuse.com/queryselector) which provide the querySelector API; which includes most modern desktop and mobile browser back to IE 8 (not bad).
