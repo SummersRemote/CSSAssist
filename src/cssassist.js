@@ -44,6 +44,7 @@
                 } else if (context.nodeType) {
                         this[0] = context;
                         this.length = 1;
+                        return this;
                 } else if (context === '[object NodeList]') {} else {
                         this.length = 0;
                 }
