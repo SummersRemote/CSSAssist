@@ -10,10 +10,9 @@ I am a long standing fan of [jQuery](http://jquery.com/) and more recently [Angu
 Support is [limited to browsers](http://caniuse.com/queryselector) which provide the querySelector API; which includes most modern desktop and mobile browser back to IE 8 (not bad).
 
 Enjoy!
-
 Use
 ===
-CSSAssist uses the CSS selector rule syntax for selecting DOM elements.
+CSSAssist provides a [fluent API](http://en.wikipedia.org/wiki/Fluent_interface) simmiliar to jQuery and relies on the CSS selector syntax for selecting DOM elements.
 ```javascript
 $css()                         // select nothing
 $css('*')                      // select all nodes in the document
