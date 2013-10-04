@@ -157,10 +157,10 @@
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
                                         for (var j = 0; j < classArray.length; ++j) {
-                                                if (css(this[i]).hasClass(classArray[j])) {
-                                                        css(this[i]).removeClass(classArray[j])
+                                                if ($css(this[i]).hasClass(classArray[j])) {
+                                                        $css(this[i]).removeClass(classArray[j])
                                                 } else {
-                                                        css(this[i]).addClass(classArray[j]);
+                                                        $css(this[i]).addClass(classArray[j]);
                                                 }
                                         }
                                 }
