@@ -13,6 +13,7 @@ Enjoy!
 Use
 ===
 CSSAssist provides a [fluent API](http://en.wikipedia.org/wiki/Fluent_interface) simmiliar to jQuery and relies on the CSS selector syntax for selecting DOM elements.
+
 ```javascript
 $css()                         // select nothing
 $css('*')                      // select all nodes in the document
@@ -27,6 +28,7 @@ More information:
 Methods
 =========
 Methods which accept either "classList" or "attrList" will accept either an array of string values or a space delimited string of values. For example, each of the following hasClass() calls will return the same result.
+
 ```javascript
 var asString = 'myAwesomeClass someOtherClass';
 var asArray = ['myAwesomeClass','someOtherClass'];
