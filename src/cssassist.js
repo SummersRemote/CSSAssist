@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 /**
  * @author William Summers
  *
@@ -64,11 +63,15 @@
                  * Utility method to coerce a space delimited string into an array
                  */
                 makeArray: function (values) {
+
                         if (values instanceof Array) {
                                 return values;
                         } else if (typeof values === 'string') {
                                 return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
+                        } else {
+                                return [];
                         }
+
                 },
 
                 /**
@@ -80,7 +83,7 @@
                 hasClass: function (classList) {
                         if (this.length === 0) {
                                 return false;
-                        } else {
+                        } else if (classList) {
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
                                         var className = this[i].className;
@@ -91,6 +94,8 @@
                                         }
                                 }
                                 return true;
+                        } else {
+                                return false;
                         }
                 },
 
@@ -100,14 +105,18 @@
                  * e.g. $css('div').addClass('myAwesomeStyle');
                  */
                 addClass: function (classList) {
-                        var classArray = this.makeArray(classList);
 
-                        for (var i = 0; i < this.length; ++i) {
-                                for (var j = 0; j < classArray.length; ++j) {
-                                        if (!$css(this[i]).hasClass(classArray[j])) {
-                                                this[i].className += ' ' + classArray[j];
+
+                        if (classList) {
+                                var classArray = this.makeArray(classList);
+                                for (var i = 0; i < this.length; ++i) {
+                                        for (var j = 0; j < classArray.length; ++j) {
+                                                if (!$css(this[i]).hasClass(classArray[j])) {
+                                                        this[i].className += ' ' + classArray[j];
+                                                }
                                         }
                                 }
+
                         }
                         return this;
                 },
@@ -118,17 +127,20 @@
                  * e.g. $css('div').removeClass('myAwesomeStyle');
                  */
                 removeClass: function (classList) {
-                        var classArray = this.makeArray(classList);
 
-                        for (var i = 0; i < this.length; ++i) {
-                                var newClass = ' ' + this[i].className.replace(/\s+/g, ' ') + ' ';
-                                for (var j = 0; j < classArray.length; ++j) {
-                                        while (newClass.indexOf(' ' + classArray[j] + ' ') >= 0) {
-                                                newClass = newClass.replace(' ' + classArray[j] + ' ', ' ');
+                        if (classList) {
+                                var classArray = this.makeArray(classList);
+                                for (var i = 0; i < this.length; ++i) {
+                                        var newClass = ' ' + this[i].className.replace(/\s+/g, ' ') + ' ';
+                                        for (var j = 0; j < classArray.length; ++j) {
+                                                while (newClass.indexOf(' ' + classArray[j] + ' ') >= 0) {
+                                                        newClass = newClass.replace(' ' + classArray[j] + ' ', ' ');
+                                                }
                                         }
+                                        this[i].className = newClass.trim();
                                 }
-                                this[i].className = newClass.trim();
                         }
+                        return this;
                 },
 
                 /**
@@ -139,18 +151,22 @@
                  * e.g. $css('div').toggleClass('myAwesomeStyle');
                  */
                 toggleClass: function (classList) {
-                        var classArray = this.makeArray(classList);
+                        if (classList) {
+                                var classArray = this.makeArray(classList);
 
-                        for (var i = 0; i < this.length; ++i) {
-                                for (var j = 0; j < classArray.length; ++j) {
-                                        if (css(this[i]).hasClass(classArray[j])) {
-                                                css(this[i]).removeClass(classArray[j])
-                                        } else {
-                                                css(this[i]).addClass(classArray[j]);
+
+                                for (var i = 0; i < this.length; ++i) {
+                                        for (var j = 0; j < classArray.length; ++j) {
+                                                if (css(this[i]).hasClass(classArray[j])) {
+                                                        css(this[i]).removeClass(classArray[j])
+                                                } else {
+                                                        css(this[i]).addClass(classArray[j]);
+                                                }
                                         }
                                 }
                         }
                         return this;
+
                 },
 
                 /**
@@ -159,10 +175,12 @@
                  * e.g. $css('div').clearAttr('class style');
                  */
                 clearAttr: function (attrList) {
-                        var attrArray = this.makeArray(attrList);
-                        for (var i = 0; i < this.length; ++i) {
-                                for (var j = 0; j < attrArray.length; ++j) {
-                                        this[i].removeAttribute(attrArray[j]);
+                        if (attrList) {
+                                var attrArray = this.makeArray(attrList);
+                                for (var i = 0; i < this.length; ++i) {
+                                        for (var j = 0; j < attrArray.length; ++j) {
+                                                this[i].removeAttribute(attrArray[j]);
+                                        }
                                 }
                         }
                         return this;
@@ -173,12 +191,15 @@
                  * e.g. $css().loadCSSLink('http://meyerweb.com/eric/tools/css/reset/reset.css');
                  */
                 loadCSSLink: function (url) {
-                        var head = document.getElementsByTagName('head')[0];
-                        var link = document.createElement('link');
-                        link.type = 'text/css';
-                        link.rel = 'stylesheet';
-                        link.href = url;
-                        head.appendChild(link);
+                        if (url) {
+                                var head = document.getElementsByTagName('head')[0];
+                                var link = document.createElement('link');
+                                link.type = 'text/css';
+                                link.rel = 'stylesheet';
+                                link.href = url;
+                                head.appendChild(link);
+                                return this;
+                        }
                         return this;
                 },
 
@@ -188,14 +209,16 @@
                  * e.g $css().loadCSS( 'body { background-color: red;} div { background-color: yellow;}' );
                  */
                 loadCSS: function (styles) {
-                        var head = document.getElementsByTagName('head')[0];
-                        var styleNode = document.createElement('style');
-                        styleNode.type = 'text/css';
+                        if (styles) {
+                                var head = document.getElementsByTagName('head')[0];
+                                var styleNode = document.createElement('style');
+                                styleNode.type = 'text/css';
 
-                        if (styleNode.styleSheet) styleNode.styleSheet.cssText = styles;
-                        else styleNode.appendChild(document.createTextNode(styles));
+                                if (styleNode.styleSheet) styleNode.styleSheet.cssText = styles;
+                                else styleNode.appendChild(document.createTextNode(styles));
 
-                        head.appendChild(styleNode);
+                                head.appendChild(styleNode);
+                        }
                         return this;
                 }
 
