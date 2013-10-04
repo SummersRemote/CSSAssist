@@ -2,20 +2,38 @@ CSSAssist
 =========
 
 CSSAssist is a small (<2kb) JavaScript library for working with CSS.
+> It is amazing what you can do with a simple responsive grid and a handful of JavaScript methods!
+I am a long standing fan of [jQuery](http://jquery.com/) and more recently [AngularJS](http://angularjs.org/) and frequently rely on them.  I have, however, come to realize that there are times when they are simply too much and that I desire a smaller library and smaller footprint.  CSSAssist provides methods for working with stylesheets. Period.  It does NOT provide methods for manipulating the style attribute on a node, append/prepend text/html, ajax, binding, etc. - if you need those things, I highly recommend [jQuery](http://jquery.com/) or [AngularJS](http://angularjs.org/).
+
+Support is [limited to browsers](http://caniuse.com/queryselector) which provide the querySelector API; which includes most modern desktop and mobile browser back to IE 8 (not bad).
+
+Enjoy!
+
 Use
 ===
 CSSAssist uses the CSS selector rule syntax for selecting DOM elements.
-
 ```javascript
 $css()                         // select nothing
 $css('*')                      // select all nodes in the document
-$css('p.myAwesomeClass')       // select all &lt;p&gt; nodes with the class .myAwesomeClass
-$css('body > div')             // select all &lt;div&gt; nodes that are a child of <body>
-$css('div > p:nth-child(3n)')  // select every 3rd &lt;p&gt; node of each &lt;div&gt; node
+$css('p.myAwesomeClass')       // select all <p> nodes with the class .myAwesomeClass
+$css('body > div')             // select all <div> nodes that are a child of <body>
+$css('div > p:nth-child(3n)')  // select every 3rd <p> node of each <div> node
 ```
+More information:
+* [W3Schools Selector Reference](http://www.w3schools.com/cssref/css_selectors.asp)
+* [MDN reference on :pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes)
+* [The W3C Selector Level 3 Spec](http://www.w3.org/TR/css3-selectors/)
 Methods
 =========
-The following methods are supported.
+Methods which accept either "classList" or "attrList" will accept either an array of string values or a space delimited string of values. For example, each of the following hasClass() calls will return the same result.
+```javascript
+var asString = 'myAwesomeClass someOtherClass';
+var asArray = ['myAwesomeClass','someOtherClass'];
+
+$css('div').hasClass(asString);
+$css('div').hasClass(asArray);
+$css('div').hasClass('myAwesomeClass someOtherClass');
+```
 hasClass(classList)
 -------------------
 The hasClass() method return true if and only if each node in the context has each class in the classList.  For instance
