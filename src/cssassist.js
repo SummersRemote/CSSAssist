@@ -18,8 +18,9 @@
  * @author William Summers
  *
  * CSSAssist provides a minimal set of methods for working with CSS
- * Browser support is limited by the availability of querySelector (http://caniuse.com/queryselector)
- *            and add/removeEventListener (ie9+)
+ * Browser support is limited by the availability of
+ *            querySelector (http://caniuse.com/queryselector)
+ *            add/removeEventListener (ie9+, most others support)
  */
 (function (window, undefined) {
 
