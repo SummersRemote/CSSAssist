@@ -1,13 +1,13 @@
 CSSAssist
 =========
 
-CSSAssist is a small (<2kb) JavaScript library for working with CSS.
+CSSAssist is a small (<2.5kb minified) JavaScript library for working with CSS.
 
 > It is amazing what you can do with a simple responsive grid and a handful of JavaScript methods!
 
 I am a long standing fan of [jQuery](http://jquery.com/) and more recently [AngularJS](http://angularjs.org/) and frequently rely on them.  I have, however, come to realize that there are times when they are simply too much and that I desire a smaller library and smaller footprint.  CSSAssist provides methods for working with stylesheets. Period.  It does NOT provide methods for manipulating the style attribute on a node, appending and prepending, ajax, binding, ... - if you need those things, I highly recommend [jQuery](http://jquery.com/) or [AngularJS](http://angularjs.org/).
 
-Support is [limited to browsers](http://caniuse.com/queryselector) which provide the querySelector API; which includes most modern desktop and mobile browser back to IE 8 (not too bad).
+Support is [limited to browsers](http://caniuse.com/queryselector) which provide the querySelector API and the add/removeEventListener API; which includes most modern desktop and mobile browsers as well as IE9+.
 
 Enjoy!
 Use
@@ -108,6 +108,28 @@ The loadCSS() method loads a programmatically constructed stylesheet.The context
 var myStyles = "body { background-color: red;} div { background-color: yellow;}";
 $css().loadCSS(myStyles);
 ```
+
+addEventListener(type, listener, useCapture)
+--------------------------------------------
+The addEventListener() method adds the specified listener to all nodes in the context.  For example,
+
+```javascript
+var myListener = function (event) {
+  this.style.visibility='hidden';
+};
+
+$css('div.makeInvisible').addEventListener('click', myListener );
+```
+adds the event listener, myListener, to the click event of all &lt;div&gt; nodes with the class "makeInvisible".
+
+removeEventListener(type, listener, useCapture)
+------------------------------------------------
+The removeEventListener() method removes the specified listener from all nodes in the context.  For example,
+
+```javascript
+$css('div.makeInvisible').removeEventListener('click', myListener );
+```
+removes the event listener, myListener, from the click event of all &lt;div&gt; nodes with the class "makeInvisible".  The event will no longer fire when the &lt;div&gt; is clicked.
 
 Plugins
 =======
