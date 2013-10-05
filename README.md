@@ -1,11 +1,11 @@
 CSSAssist
 =========
 
-CSSAssist is a small (<2.5kb minified, <1kb gzipped) JavaScript library for working with CSS.
+CSSAssist is a small (~2.5kb minified, <1kb gzipped) JavaScript library for working with CSS.
 
 > It is amazing what you can do with a simple responsive grid and a handful of JavaScript methods!
 
-I am a long standing fan of [jQuery](http://jquery.com/) and more recently [AngularJS](http://angularjs.org/) and frequently rely on them.  I have, however, come to realize that there are times when they are simply too much and that I desire a smaller library and smaller footprint.  CSSAssist provides methods for working with stylesheets. Period.  It does NOT provide methods for manipulating the style attribute on a node, appending and prepending, ajax, binding, ... - if you need those things, I highly recommend [jQuery](http://jquery.com/) or [AngularJS](http://angularjs.org/).
+I am a long standing fan of [jQuery](http://jquery.com/) and more recently [AngularJS](http://angularjs.org/) and frequently rely on them.  I have, however, come to realize that there are times when they are simply too much and that I desire a smaller library and smaller footprint.  CSSAssist provides methods for working with stylesheets. Period.  It does NOT provide methods for manipulating the style attribute on a node, appending and prepending, ajax, ... - if you need those things, I highly recommend [jQuery](http://jquery.com/) or [AngularJS](http://angularjs.org/).
 
 Support is [limited to browsers](http://caniuse.com/queryselector) which provide the querySelector API and the add/removeEventListener API; which includes most modern desktop and mobile browsers as well as IE9+.
 
@@ -15,7 +15,8 @@ Use
 CSSAssist provides a [fluent API](http://en.wikipedia.org/wiki/Fluent_interface) simmiliar to jQuery and relies on the CSS selector syntax for selecting DOM elements.
 
 ```javascript
-$css()                         // select nothing
+$css()                         // select the window object
+$css('')                       // select the window.document object
 $css('*')                      // select all nodes in the document
 $css('p.myAwesomeClass')       // select all <p> nodes with the class .myAwesomeClass
 $css('body > div')             // select all <div> nodes that are a child of <body>
@@ -108,6 +109,12 @@ The loadCSS() method loads a programmatically constructed stylesheet.The context
 var myStyles = "body { background-color: red;} div { background-color: yellow;}";
 $css().loadCSS(myStyles);
 ```
+Event Listeners
+===============
+The cssassist.js file also includes two methods for binding events.  They are implemented as CSSAssist extensions and wrap the add/removeListener methods such that the provided listener is added to each node in the context.
+The following links are good resources for events:
+* [MDN Reference fo DOM events](https://developer.mozilla.org/en-US/docs/Web/Reference/Events)
+* [MDN Reference for window events](https://developer.mozilla.org/en-US/docs/Web/API/Window#Event_handlers)
 
 addEventListener(type, listener, useCapture)
 --------------------------------------------
