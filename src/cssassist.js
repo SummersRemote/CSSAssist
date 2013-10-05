@@ -33,10 +33,14 @@
         CSSAssist.fn = CSSAssist.prototype = {
 
                 // CSSAssist verion, e.g.  CSSAssist().version;
-                version: '0.9.0',
+                version: '0.9.3',
 
                 // default length to 0
                 length: 0,
+
+                document: window.document,
+                navigator: window.navigator,
+                location: window.location,
 
                 constructor: CSSAssist,
 
@@ -49,17 +53,22 @@
                 init: function (context) {
 
                         if (!context) {
+                                this[0] = window;
+                                this.length = 1;
                                 return this;
-                        }
-                        else if (context.nodeType) {
+                        } else if (context.nodeType) {
                                 this[0] = context;
                                 this.length = 1;
                                 return this;
-                        }
-                        else if (typeof context === 'string') {
-                                context = document.querySelectorAll(context);
-                        }
-                        else if (context === '[object NodeList]') {
+                        } else if (typeof context === 'string') {
+                                if (context.length === 0) {
+                                        this[0] = document;
+                                        this.length = 1;
+                                        return this;
+                                } else {
+                                        context = document.querySelectorAll(context);
+                                }
+                        } else if (context === '[object NodeList]') {
                                 return this;
                         }
 
@@ -79,11 +88,9 @@
 
                         if (values instanceof Array) {
                                 return values;
-                        }
-                        else if (typeof values === 'string') {
+                        } else if (typeof values === 'string') {
                                 return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
-                        }
-                        else {
+                        } else {
                                 return [];
                         }
 
@@ -98,8 +105,7 @@
                 hasClass: function (classList) {
                         if (this.length === 0) {
                                 return false;
-                        }
-                        else if (classList) {
+                        } else if (classList) {
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
                                         var className = this[i].className;
@@ -110,8 +116,7 @@
                                         }
                                 }
                                 return true;
-                        }
-                        else {
+                        } else {
                                 return false;
                         }
                 },
@@ -171,8 +176,7 @@
                                         for (var j = 0; j < classArray.length; ++j) {
                                                 if (CSSAssist(this[i]).hasClass(classArray[j])) {
                                                         CSSAssist(this[i]).removeClass(classArray[j])
-                                                }
-                                                else {
+                                                } else {
                                                         CSSAssist(this[i]).addClass(classArray[j]);
                                                 }
                                         }
@@ -230,7 +234,7 @@
                                 head.appendChild(styleNode);
                         }
                         return this;
-                },
+                }
 
         };
 
