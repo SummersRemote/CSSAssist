@@ -1,7 +1,7 @@
 CSSAssist
 =========
 
-CSSAssist is a small (<2.5kb minified) JavaScript library for working with CSS.
+CSSAssist is a small (<2.5kb minified, <1kb gzipped) JavaScript library for working with CSS.
 
 > It is amazing what you can do with a simple responsive grid and a handful of JavaScript methods!
 
