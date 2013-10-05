@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * @author William Summers
  *
@@ -24,47 +25,52 @@
 (function (window, undefined) {
 
         // this is the wrapper object
-        $css = function (selector) {
-                return new CSSAssist(selector);
+        CSSAssist = function (selector) {
+                return new CSSAssist.fn.init(selector);
         };
 
-        /**
-         * CSSAssist
-         * context may be empty, a string, a node, or a nodeList
-         *    if context is empty ( $css() ), then no will be available
-         *    if context is a string, it must be a vaild CSS selector
-         */
-        var CSSAssist = function (context) {
-
-                if (!context) {
-                        this.length = 0;
-                        return this;
-                }
-                else if (context.nodeType) {
-                        this[0] = context;
-                        this.length = 1;
-                        return this;
-                }
-                else if (typeof context === 'string') {
-                        context = document.querySelectorAll(context);
-                }
-                else if (context === '[object NodeList]') {}
-                else {
-                        this.length = 0;
-                        return this;
-                }
-
-                if (context) {
-                        for (var i = 0; i < context.length; ++i) {
-                                this[i] = context[i];
-                        }
-                        this.length = context.length;
-                        return this;
-                }
-        }
-
         // define the CSSAssist prototype
-        $css.fn = CSSAssist.prototype = {
+        CSSAssist.fn = CSSAssist.prototype = {
+
+                // CSSAssist verion, e.g.  CSSAssist().version;
+                version: '0.9.0',
+
+                // default length to 0
+                length: 0,
+
+                constructor: CSSAssist,
+
+                /**
+                 * CSSAssist
+                 * context may be empty, a string, a node, or a nodeList
+                 *    if context is empty ( $css() ), then no will be available
+                 *    if context is a string, it must be a vaild CSS selector
+                 */
+                init: function (context) {
+
+                        if (!context) {
+                                return this;
+                        }
+                        else if (context.nodeType) {
+                                this[0] = context;
+                                this.length = 1;
+                                return this;
+                        }
+                        else if (typeof context === 'string') {
+                                context = document.querySelectorAll(context);
+                        }
+                        else if (context === '[object NodeList]') {
+                                return this;
+                        }
+
+                        if (context) {
+                                for (var i = 0; i < context.length; ++i) {
+                                        this[i] = context[i];
+                                }
+                                this.length = context.length;
+                                return this;
+                        }
+                },
 
                 /**
                  * Utility method to coerce a space delimited string into an array
@@ -120,7 +126,7 @@
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
                                         for (var j = 0; j < classArray.length; ++j) {
-                                                if (!$css(this[i]).hasClass(classArray[j])) {
+                                                if (!CSSAssist(this[i]).hasClass(classArray[j])) {
                                                         this[i].className += ' ' + classArray[j];
                                                 }
                                         }
@@ -163,11 +169,11 @@
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
                                         for (var j = 0; j < classArray.length; ++j) {
-                                                if ($css(this[i]).hasClass(classArray[j])) {
-                                                        $css(this[i]).removeClass(classArray[j])
+                                                if (CSSAssist(this[i]).hasClass(classArray[j])) {
+                                                        CSSAssist(this[i]).removeClass(classArray[j])
                                                 }
                                                 else {
-                                                        $css(this[i]).addClass(classArray[j]);
+                                                        CSSAssist(this[i]).addClass(classArray[j]);
                                                 }
                                         }
                                 }
@@ -226,36 +232,41 @@
                         return this;
                 },
 
-                /**
-                 * Add an event listener to each node in context
-                 */
-                addEventListener: function (type, listener, useCapture) {
-                        if (type && listener) {
-                                if (typeof useCapture === "undefined") {
-                                        useCapture = false;
-                                }
-                                for (var i = 0; i < this.length; ++i) {
-                                        this[i].addEventListener(type, listener, useCapture);
-                                }
-                        }
-                        return this;
-                },
+        };
 
-                /**
-                 * Remove an event listener from each node in context
-                 */
-                removeEventListener: function (type, listener, useCapture) {
-                        if (type && listener) {
-                                if (typeof useCapture === "undefined") {
-                                        useCapture = false;
-                                }
-                                for (var i = 0; i < this.length; ++i) {
-                                        this[i].removeEventListener(type, listener, useCapture);
-                                }
-                        }
-                        return this;
-                }
-
-        }
+        // Give the init method the CSSAssist prototype for later instantiation
+        CSSAssist.fn.init.prototype = CSSAssist.fn;
 
 })(this);
+
+// event listener methods as plugins
+
+/**
+ * Add an event listener to each node in context
+ */
+CSSAssist.fn.addEventListener = function (type, listener, useCapture) {
+        if (type && listener) {
+                if (typeof useCapture === "undefined") {
+                        useCapture = false;
+                }
+                for (var i = 0; i < this.length; ++i) {
+                        this[i].addEventListener(type, listener, useCapture);
+                }
+        }
+        return this;
+};
+
+/**
+ * Remove an event listener from each node in context
+ */
+CSSAssist.fn.removeEventListener = function (type, listener, useCapture) {
+        if (type && listener) {
+                if (typeof useCapture === "undefined") {
+                        useCapture = false;
+                }
+                for (var i = 0; i < this.length; ++i) {
+                        this[i].removeEventListener(type, listener, useCapture);
+                }
+        }
+        return this;
+};
