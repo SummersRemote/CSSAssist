@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * @author William Summers
  *
@@ -39,14 +38,20 @@
 
                 if (!context) {
                         this.length = 0;
-                } else if (typeof context === 'string') {
-                        context = document.querySelectorAll(context);
-                } else if (context.nodeType) {
+                        return this;
+                }
+                else if (context.nodeType) {
                         this[0] = context;
                         this.length = 1;
                         return this;
-                } else if (context === '[object NodeList]') {} else {
+                }
+                else if (typeof context === 'string') {
+                        context = document.querySelectorAll(context);
+                }
+                else if (context === '[object NodeList]') {}
+                else {
                         this.length = 0;
+                        return this;
                 }
 
                 if (context) {
@@ -54,9 +59,8 @@
                                 this[i] = context[i];
                         }
                         this.length = context.length;
+                        return this;
                 }
-
-                return this;
         }
 
         // define the CSSAssist prototype
@@ -69,9 +73,11 @@
 
                         if (values instanceof Array) {
                                 return values;
-                        } else if (typeof values === 'string') {
+                        }
+                        else if (typeof values === 'string') {
                                 return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
-                        } else {
+                        }
+                        else {
                                 return [];
                         }
 
@@ -86,7 +92,8 @@
                 hasClass: function (classList) {
                         if (this.length === 0) {
                                 return false;
-                        } else if (classList) {
+                        }
+                        else if (classList) {
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
                                         var className = this[i].className;
@@ -97,7 +104,8 @@
                                         }
                                 }
                                 return true;
-                        } else {
+                        }
+                        else {
                                 return false;
                         }
                 },
@@ -108,8 +116,6 @@
                  * e.g. $css('div').addClass('myAwesomeStyle');
                  */
                 addClass: function (classList) {
-
-
                         if (classList) {
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
@@ -130,7 +136,6 @@
                  * e.g. $css('div').removeClass('myAwesomeStyle');
                  */
                 removeClass: function (classList) {
-
                         if (classList) {
                                 var classArray = this.makeArray(classList);
                                 for (var i = 0; i < this.length; ++i) {
@@ -160,14 +165,14 @@
                                         for (var j = 0; j < classArray.length; ++j) {
                                                 if ($css(this[i]).hasClass(classArray[j])) {
                                                         $css(this[i]).removeClass(classArray[j])
-                                                } else {
+                                                }
+                                                else {
                                                         $css(this[i]).addClass(classArray[j]);
                                                 }
                                         }
                                 }
                         }
                         return this;
-
                 },
 
                 /**
@@ -224,11 +229,13 @@
                 /**
                  * Add an event listener to each node in context
                  */
-                addEventListener: function(type, listener, useCapture) {
+                addEventListener: function (type, listener, useCapture) {
                         if (type && listener) {
-                                if (typeof useCapture === "undefined") {useCapture = false;}
+                                if (typeof useCapture === "undefined") {
+                                        useCapture = false;
+                                }
                                 for (var i = 0; i < this.length; ++i) {
-                                    this[i].addEventListener(type, listener, useCapture);
+                                        this[i].addEventListener(type, listener, useCapture);
                                 }
                         }
                         return this;
@@ -237,11 +244,13 @@
                 /**
                  * Remove an event listener from each node in context
                  */
-                removeEventListener: function(type, listener, useCapture) {
+                removeEventListener: function (type, listener, useCapture) {
                         if (type && listener) {
-                                if (typeof useCapture === "undefined") {useCapture = false;}
+                                if (typeof useCapture === "undefined") {
+                                        useCapture = false;
+                                }
                                 for (var i = 0; i < this.length; ++i) {
-                                    this[i].removeEventListener(type, listener, useCapture);
+                                        this[i].removeEventListener(type, listener, useCapture);
                                 }
                         }
                         return this;
