@@ -93,7 +93,7 @@ would remove the "class" and "style" attributes from every &lt;div&gt; node in t
 
 loadCSS(url)
 -----------------
-The loadCSS() method loads an external CSS file (referenced by url).  The context is not relevant.  For example,
+The loadCSS() method loads an external CSS file (referenced by url) by creating and inserting an appropriate &lt;script&gt; element.  The context is not relevant.  For example,
 
 ```javascript
 $css().loadCSS('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css');
