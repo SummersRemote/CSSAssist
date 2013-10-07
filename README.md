@@ -12,7 +12,7 @@ Support is [limited to browsers](http://caniuse.com/queryselector) which provide
 Enjoy!
 Use
 ===
-CSSAssist provides a [fluent API](http://en.wikipedia.org/wiki/Fluent_interface) simmiliar to jQuery and relies on the CSS selector syntax for selecting DOM elements.
+CSSAssist provides a [fluent API](http://en.wikipedia.org/wiki/Fluent_interface) similiar to jQuery and relies on the CSS selector syntax for selecting DOM elements.
 
 ```javascript
 $css()                         // select the window object
