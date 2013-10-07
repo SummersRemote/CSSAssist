@@ -60,6 +60,7 @@
                                 this[0] = context;
                                 this.length = 1;
                                 return this;
+                        } else if (context === '[object NodeList]') {
                         } else if (typeof context === 'string') {
                                 if (context.length === 0) {
                                         this[0] = document;
@@ -68,10 +69,8 @@
                                 } else {
                                         context = document.querySelectorAll(context);
                                 }
-                        } else if (context === '[object NodeList]') {
-                                return this;
                         }
-
+                        // copy the items in context (NodeList[i] to this[i])
                         if (context) {
                                 for (var i = 0; i < context.length; ++i) {
                                         this[i] = context[i];
@@ -89,6 +88,7 @@
                         if (values instanceof Array) {
                                 return values;
                         } else if (typeof values === 'string') {
+                                // remove beginning and ending spaces and split on space(s).
                                 return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
                         } else {
                                 return [];
@@ -206,7 +206,7 @@
                  * Load an external CSS file
                  * e.g. $css().loadCSSLink('http://meyerweb.com/eric/tools/css/reset/reset.css');
                  */
-                loadCSSLink: function (url) {
+                loadCSS: function (url) {
                         if (url) {
                                 var head = document.getElementsByTagName('head')[0];
                                 var link = document.createElement('link');
@@ -224,7 +224,7 @@
                  * styles is a string containing css rules to be injected
                  * e.g $css().loadCSS( 'body { background-color: red;} div { background-color: yellow;}' );
                  */
-                loadCSS: function (styles) {
+                createCSS: function (styles) {
                         if (styles) {
                                 var head = document.getElementsByTagName('head')[0];
                                 var styleNode = document.createElement('style');
