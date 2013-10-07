@@ -33,14 +33,10 @@
         CSSAssist.fn = CSSAssist.prototype = {
 
                 // CSSAssist verion, e.g.  CSSAssist().version;
-                version: '0.9.3',
+                version: '1.0.0',
 
                 // default length to 0
                 length: 0,
-
-                document: window.document,
-                navigator: window.navigator,
-                location: window.location,
 
                 constructor: CSSAssist,
 
