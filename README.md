@@ -91,23 +91,23 @@ $css('div').clearAttr('class style');
 
 would remove the "class" and "style" attributes from every &lt;div&gt; node in the document.
 
-loadCSSLink(url)
+loadCSS(url)
 -----------------
-The loadCSSLink() method loads an external CSS file (referenced by url).  The context is not relevant.  For example,
+The loadCSS() method loads an external CSS file (referenced by url).  The context is not relevant.  For example,
 
 ```javascript
-$css().loadCSSLink('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css);
+$css().loadCSS('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css');
 ```
 
 would like the Normalize CSS stylesheet from [CDNJS](http://cdnjs.com/).
 
-loadCSS(styles)
+createCSS(styles)
 ----------------
-The loadCSS() method loads a programmatically constructed stylesheet.The context is not relevant. For example,
+The createCSS() method loads a programmatically constructed stylesheet. The context is not relevant. For example,
 
 ```javascript
 var myStyles = "body { background-color: red;} div { background-color: yellow;}";
-$css().loadCSS(myStyles);
+$css().createCSS(myStyles);
 ```
 Event Listeners
 ===============
