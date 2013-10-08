@@ -186,7 +186,7 @@
                  * attrList may be either a space delimited string or an array
                  * e.g. $css('div').clearAttr('class style');
                  */
-                clearAttr: function (attrList) {
+                removeAttr: function (attrList) {
                         if (attrList) {
                                 var attrArray = this.makeArray(attrList);
                                 for (var i = 0; i < this.length; ++i) {
