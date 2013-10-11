@@ -22,73 +22,66 @@
  *            querySelector (http://caniuse.com/queryselector)
  *            add/removeEventListener (ie9+, most others support)
  */
+// create a closure
 (function (window) {
 
         // this is the main object
-        CSSAssist = function (selector) {
+        CSSAssist = function (selector, context) {
                 return new CSSAssist.fn.init(selector);
         };
 
-        var rSpace = /[\s+\t\r\n\f]/g;
-
-        CSSAssist.version = '1.1.3';
+        CSSAssist.version = '2.0.1';
 
         // define the CSSAssist prototype
         CSSAssist.fn = CSSAssist.prototype = {
 
                 /**
                  * CSSAssist
-                 *    if selector is a string, it must be a vaild CSS selector
+                 *
                  */
                 init: function (selector) {
 
-                        var context;
-                        if (!selector) context = [];
-                        else if (selector instanceof Array) context = selector
-                        //else if (typeof selector === 'function') return CSSAssist(selector)
-                        else if (typeof selector === 'object') context = [selector]
-                        else if (typeof selector === 'string') context = document.querySelectorAll(selector)
-                        else context = [];
+                        // if no selector, return empty array
+                        if (!selector) return [];
+                        // got a function 
+                        else if (typeof (selector) == 'function') return selector(CSSAssist)
+                        // got self
+                        else if (selector instanceof CSSAssist) return selector
+                        else {
+                                var context;
+                                if (selector instanceof Array) context = selector
+                                // wrap dom nodes.
+                                else if (typeof selector === 'object') context = [selector]
+                                // if its a string (CSS selector)
+                                else if (typeof selector === 'string') {
+                                        context = [].slice.call(document.querySelectorAll(selector));
+                                } else context = []
 
-                        context.__proto__ = CSSAssist.fn;
-                        return context;
-
-                },
-
-                /**
-                 * Utility method to coerce a space delimited string into an array
-                 */
-                makeArray: function (values) {
-                        if (values instanceof Array) return values
-                        else if (typeof values === 'string') return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
-                        else return [];
-                },
-
-                iterate: function (values, func) {
-                        var array = this.makeArray(values);
-                        for (var i = 0, tl = this.length; i < tl; ++i) {
-                                var className = (' ' + this[i].className + ' ').replace(rSpace, ' ');
-                                for (var j = 0, vl = array.length; j < vl; ++j) {
-                                        func.call(this, this[i], array[j]);
-                                }
+                                // set the prototype for the context tp CSSAssist and return
+                                        context.__proto__ = CSSAssist.fn;
+                                return context;
                         }
 
                 },
 
+                // add some array methods
+                forEach: [].forEach,
+
                 /**
-                 * Returns true if each node in the context containes each vlass in values
+                 * Returns true if each node in the context containes each class in values
                  * Returns false otherwise.
                  * values may be either a space delimited string or an array
                  * e.g. $css('div').hasClass('myAwesomeStyle');
                  */
-                hasClass: function (values) {
-                        if (!values || this.length === 0) return false;
+                hasClass: function (values, context) {
+                        if (!values) return false;
                         else {
-                                var array = this.makeArray(values);
-                                for (var i = 0, tl = this.length; i < tl; ++i) {
-                                        var className = (' ' + this[i].className + ' ').replace(rSpace, ' ');
-                                        for (var j = 0, vl = array.length; j < vl; ++j) {
-                                                if (!(className.indexOf(array[j]) >= 0)) return false;
+                                var context = (context) ? CSSAssist(context) : this
+                                var values = makeArray(values);
+                                for (var i = 0, il = context.length; i < il; ++i) {
+                                        var className = (' ' + context[i].className + ' ').replace(rSpace, ' ');
+                                        for (var j = 0, jl = values.length; j < jl; ++j) {
+                                                if (!(className.indexOf(' ' + values[j] + ' ') > -1)) return false;
                                         }
                                 }
                                 return true;
@@ -96,67 +89,107 @@
                 },
 
                 /**
-                 * Adds each vlass in values to each node in context
+                 * Adds each class in values to each node in context
                  * values may be either a space delimited string or an array
                  * e.g. $css('div').addClass('myAwesomeStyle');
                  */
-                addClass: function (values) {
+                addClass: function (values, context) {
                         if (values) {
-                                this.iterate(values, function (i, j) {
-                                        if (!CSSAssist(i).hasClass(j)) i.className += ' ' + j;
-                                });
+                                var context = (context) ? CSSAssist(context) : this
+                                var values = makeArray(values);
+                                context.forEach(
+                                        function (v, i, ar) {
+                                                for (var j = 0, jl = values.length; j < jl; ++j) {
+                                                        v.className += ' ' + values[j];
+                                                }
+                                        }, this
+                                )
                         }
                         return this;
                 },
 
                 /**
-                 * Removes each vlass in values from each node in context
+                 * Removes each class in values from each node in context
                  * values may be either a space delimited string or an array
                  * e.g. $css('div').removeClass('myAwesomeStyle');
                  */
-                removeClass: function (values) {
+                removeClass: function (values, context) {
                         if (values) {
-                                var vlassArray = this.makeArray(values);
-                                for (var i = 0, tl = this.length; i < tl; ++i) {
-                                        var className = (' ' + this[i].className + ' ').replace(rSpace, ' ');
-                                        for (var j = 0, vl = vlassArray.length; j < vl; ++j) {
-                                                while (className.indexOf(' ' + vlassArray[j] + ' ') >= 0) {
-                                                        className = className.replace(' ' + vlassArray[j] + ' ', ' ');
+                                var context = (context) ? CSSAssist(context) : this
+                                var values = makeArray(values);
+                                context.forEach(
+                                        function (v, i, ar) {
+                                                var className = (' ' + v.className + ' ').replace(rSpace, ' ');
+                                                for (var j = 0, jl = values.length; j < jl; ++j) {
+                                                        while (className.indexOf(' ' + values[j] + ' ') >= 0) {
+                                                                className = className.replace(' ' + values[j] + ' ', ' ');
+                                                        }
                                                 }
-                                        }
-                                        this[i].className = className.trim();
-                                }
+                                                v.className = className.trim();
+                                        }, this
+                                )
                         }
                         return this;
                 },
 
                 /**
-                 * For each vlass in values for each node in context
-                 *    if the vlass is present, remove it
-                 *    if the vlass is not present, add it
+                 * For each class in values for each node in context
+                 *    if the class is present, remove it
+                 *    if the class is not present, add it
                  * values may be either a space delimited string or an array
                  * e.g. $css('div').toggleClass('myAwesomeStyle');
                  */
-                toggleClass: function (values) {
+                toggleClass: function (values, context) {
                         if (values) {
-                                this.iterate(values, function (i, j) {
-                                        if (CSSAssist(i).hasClass(j)) CSSAssist(i).removeClass(j)
-                                        else CSSAssist(i).addClass(j);
-                                })
+                                var context = (context) ? CSSAssist(context) : this
+                                var values = makeArray(values);
+                                context.forEach(
+                                        function (v, i, ar) {
+                                                for (var j = 0, jl = values.length; j < jl; ++j) {
+                                                        if (this.hasClass(values[j], v)) this.removeClass(values[j], v)
+                                                        else this.addClass(values[j], v);
+                                                }
+                                        }, this
+                                )
                         }
                         return this;
                 },
 
                 /**
-                 * Remove each attribute in values from each node in context
-                 * values may be either a space delimited string or an array
-                 * e.g. $css('div').vlearAttr('vlass style');
+                 * for each node in context
+                 *		sets or clears the specified style property
+                 * e.g. $css('.red').setStyle('color', '#FF0000'); // sets the style
+                 * e.g. $css('.red').setStyle('color', ); // clears the style
                  */
-                removeAttr: function (values) {
-                        if (values) {
-                                this.iterate(values, function (i, j) {
-                                        i.removeAttribute(j);
-                                })
+                setStyle: function (property, value, context) {
+                        if (property) {
+                                var context = (context) ? CSSAssist(context) : this
+                                context.forEach(
+                                        function (v, i, ar) {
+                                                if (value) v.style[property] = value;
+                                                else v.style[property] = '';
+                                        }, this
+                                )
+                        }
+                        return this;
+                },
+
+                /**
+                 * for each node in context
+                 *		sets or clears the specified style property
+                 * e.g. $css('.red').setStyle('color', '#FF0000'); // sets the style
+                 * e.g. $css('.red').setStyle('color', ); // clears the style
+                 */
+                setAttr: function (attr, value, context) {
+                        if (attr) {
+                                var context = (context) ? CSSAssist(context) : this
+                                context.forEach(
+                                        function (v, i, ar) {
+                                                console.log(v)
+                                                if (value) v.setAttribute(attr, value);
+                                                else v.removeAttribute(attr);
+                                        }, this
+                                )
                         }
                         return this;
                 },
@@ -197,22 +230,36 @@
 
         };
 
+        // regex for collapsing space and newlines
+        var rSpace = /[\s+\t\r\n\f]/g;
+
+        /**
+         * Utility method to coerce a space delimited string into an array
+         */
+        makeArray = function (values) {
+                if (values instanceof Array) return values
+                else if (typeof values === 'string') return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
+                else return [];
+        };
+
         // Give the init method the CSSAssist prototype for later instantiation
         CSSAssist.fn.init.prototype = CSSAssist.fn;
 
-})();
+})(this) // end closure, window = this
 
-// event listener methods as plugins
+// event listener methods asthis plugins
 
 /**
  * Add an event listener to each node in context
  */
-CSSAssist.fn.addEventListener = function (type, listener, useCapture) {
+CSSAssist.fn.on = CSSAssist.fn.addEventListener = function (type, listener, useCapture) {
         if (type && listener) {
                 var capture = useCapture || false;
-                for (var i = 0, tl = this.length; i < tl; ++i) {
-                        this[i].addEventListener(type, listener, capture);
-                }
+                this.forEach(
+                        function (v, i, ar) {
+                                v.addEventListener(type, listener, capture);
+                        }
+                )
         }
         return this;
 };
@@ -220,12 +267,14 @@ CSSAssist.fn.addEventListener = function (type, listener, useCapture) {
 /**
  * Remove an event listener from each node in context
  */
-CSSAssist.fn.removeEventListener = function (type, listener, useCapture) {
+CSSAssist.fn.off = CSSAssist.fn.removeEventListener = function (type, listener, useCapture) {
         if (type && listener) {
                 var capture = useCapture || false;
-                for (var i = 0, tl = this.length; i < tl; ++i) {
-                        this[i].removeEventListener(type, listener, capture);
-                }
+                this.forEach(
+                        function (v, i, ar) {
+                                v.removeEventListener(type, listener, capture);
+                        }, this
+                )
         }
         return this;
 };
