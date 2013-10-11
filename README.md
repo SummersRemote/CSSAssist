@@ -1,3 +1,8 @@
+NOTE
+=====
+
+I am prepping version 2 for release.  Version 2 boasts better performance, cleaner code, and two new methods.  The documentation below has not been updated to reflect the changes (soon), but there are comments and examples in the source.
+
 CSSAssist
 =========
 
