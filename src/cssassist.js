@@ -30,7 +30,7 @@
                 return new CSSAssist.fn.init(selector);
         };
 
-        CSSAssist.version = '2.0.1';
+        CSSAssist.version = '2.1.1';
 
         // define the CSSAssist prototype
         CSSAssist.fn = CSSAssist.prototype = {
