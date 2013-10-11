@@ -65,7 +65,11 @@
                 },
 
                 // add some array methods
-                forEach: [].forEach,
+                forEach: function( func, thisObj ) {
+                	for (var i=0, il=this.length; i < il; ++i) {
+                		func.call(thisObj, this[i])
+                	}
+                },
 
                 /**
                  * Returns true if each node in the context containes each class in values
@@ -98,7 +102,7 @@
                                 var context = (context) ? CSSAssist(context) : this
                                 var values = makeArray(values);
                                 context.forEach(
-                                        function (v, i, ar) {
+                                        function (v) {
                                                 for (var j = 0, jl = values.length; j < jl; ++j) {
                                                         v.className += ' ' + values[j];
                                                 }
@@ -118,7 +122,7 @@
                                 var context = (context) ? CSSAssist(context) : this
                                 var values = makeArray(values);
                                 context.forEach(
-                                        function (v, i, ar) {
+                                        function (v) {
                                                 var className = (' ' + v.className + ' ').replace(rSpace, ' ');
                                                 for (var j = 0, jl = values.length; j < jl; ++j) {
                                                         while (className.indexOf(' ' + values[j] + ' ') >= 0) {
@@ -144,7 +148,7 @@
                                 var context = (context) ? CSSAssist(context) : this
                                 var values = makeArray(values);
                                 context.forEach(
-                                        function (v, i, ar) {
+                                        function (v) {
                                                 for (var j = 0, jl = values.length; j < jl; ++j) {
                                                         if (this.hasClass(values[j], v)) this.removeClass(values[j], v)
                                                         else this.addClass(values[j], v);
@@ -165,7 +169,7 @@
                         if (property) {
                                 var context = (context) ? CSSAssist(context) : this
                                 context.forEach(
-                                        function (v, i, ar) {
+                                        function (v) {
                                                 if (value) v.style[property] = value;
                                                 else v.style[property] = '';
                                         }, this
@@ -184,8 +188,7 @@
                         if (attr) {
                                 var context = (context) ? CSSAssist(context) : this
                                 context.forEach(
-                                        function (v, i, ar) {
-                                                console.log(v)
+                                        function (v) {
                                                 if (value) v.setAttribute(attr, value);
                                                 else v.removeAttribute(attr);
                                         }, this
@@ -256,7 +259,7 @@ CSSAssist.fn.on = CSSAssist.fn.addEventListener = function (type, listener, useC
         if (type && listener) {
                 var capture = useCapture || false;
                 this.forEach(
-                        function (v, i, ar) {
+                        function (v) {
                                 v.addEventListener(type, listener, capture);
                         }
                 )
@@ -271,7 +274,7 @@ CSSAssist.fn.off = CSSAssist.fn.removeEventListener = function (type, listener, 
         if (type && listener) {
                 var capture = useCapture || false;
                 this.forEach(
-                        function (v, i, ar) {
+                        function (v) {
                                 v.removeEventListener(type, listener, capture);
                         }, this
                 )
