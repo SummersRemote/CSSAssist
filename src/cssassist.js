@@ -22,15 +22,15 @@
  *            querySelector (http://caniuse.com/queryselector)
  *            add/removeEventListener (ie9+, most others support)
  */
-// create a closure
-(function (window) {
+// create a self-invoking function
+;(function () {
 
         // this is the main object
         CSSAssist = function (selector, context) {
                 return new CSSAssist.fn.init(selector);
         };
 
-        CSSAssist.version = '2.1.1';
+        CSSAssist.version = '2.1.3';
 
         // define the CSSAssist prototype
         CSSAssist.fn = CSSAssist.prototype = {
@@ -44,31 +44,31 @@
                         // if no selector, return empty array
                         if (!selector) return [];
                         // got a function 
-                        else if (typeof (selector) == 'function') return selector(CSSAssist)
+                        else if (typeof (selector) == 'function') return selector(CSSAssist);
                         // got self
-                        else if (selector instanceof CSSAssist) return selector
+                        else if (selector instanceof CSSAssist) return selector;
                         else {
                                 var context;
-                                if (selector instanceof Array) context = selector
+                                if (selector instanceof Array) context = selector;
                                 // wrap dom nodes.
-                                else if (typeof selector === 'object') context = [selector]
+                                else if (typeof selector === 'object') context = [selector];
                                 // if its a string (CSS selector)
                                 else if (typeof selector === 'string') {
                                         context = [].slice.call(document.querySelectorAll(selector));
-                                } else context = []
+                                } else context = [];
 
                                 // set the prototype for the context tp CSSAssist and return
-                                        context.__proto__ = CSSAssist.fn;
+                                context.__proto__ = CSSAssist.fn;
                                 return context;
                         }
 
                 },
 
-                // add some array methods
-                forEach: function( func, thisObj ) {
-                	for (var i=0, il=this.length; i < il; ++i) {
-                		func.call(thisObj, this[i])
-                	}
+                // simple forEach loop (faster than native...)
+                forEach: function( func ) {
+                    for (var i=0; i < this.length; ++i) {
+                        func.call(this, this[i]);
+                    }
                 },
 
                 /**
@@ -80,11 +80,11 @@
                 hasClass: function (values, context) {
                         if (!values) return false;
                         else {
-                                var context = (context) ? CSSAssist(context) : this
+                                var context = (context) ? CSSAssist(context) : this;
                                 var values = makeArray(values);
-                                for (var i = 0, il = context.length; i < il; ++i) {
+                                for (var i = 0; i < context.length; ++i) {
                                         var className = (' ' + context[i].className + ' ').replace(rSpace, ' ');
-                                        for (var j = 0, jl = values.length; j < jl; ++j) {
+                                        for (var j = 0; j < values.length; ++j) {
                                                 if (!(className.indexOf(' ' + values[j] + ' ') > -1)) return false;
                                         }
                                 }
@@ -103,11 +103,11 @@
                                 var values = makeArray(values);
                                 context.forEach(
                                         function (v) {
-                                                for (var j = 0, jl = values.length; j < jl; ++j) {
-                                                        v.className += ' ' + values[j];
+                                                for (var j = 0; j < values.length; ++j) {
+                                                        if (! context.hasClass(values[j], v) ) v.className += ' ' + values[j];
                                                 }
-                                        }, this
-                                )
+                                        }, context
+                                );
                         }
                         return this;
                 },
@@ -118,21 +118,22 @@
                  * e.g. $css('div').removeClass('myAwesomeStyle');
                  */
                 removeClass: function (values, context) {
-                        if (values) {
-                                var context = (context) ? CSSAssist(context) : this
-                                var values = makeArray(values);
-                                context.forEach(
-                                        function (v) {
-                                                var className = (' ' + v.className + ' ').replace(rSpace, ' ');
-                                                for (var j = 0, jl = values.length; j < jl; ++j) {
-                                                        while (className.indexOf(' ' + values[j] + ' ') >= 0) {
-                                                                className = className.replace(' ' + values[j] + ' ', ' ');
-                                                        }
-                                                }
-                                                v.className = className.trim();
-                                        }, this
-                                )
-                        }
+                        var context = (context) ? CSSAssist(context) : this
+                        var values = makeArray(values);
+                        context.forEach(
+                                function (v) {
+                                        if (values) {
+                                            var className = (' ' + v.className + ' ').replace(rSpace, ' ');
+                                            for (var j = 0; j < values.length; ++j) {
+                                                    while (className.indexOf(' ' + values[j] + ' ') >= 0) {
+                                                            className = className.replace(' ' + values[j] + ' ', ' ');
+                                                    }
+                                            }
+                                            v.className = className.trim();
+                                        } else v.removeAttribute('class');
+                                }, context
+                        );
+
                         return this;
                 },
 
@@ -149,50 +150,50 @@
                                 var values = makeArray(values);
                                 context.forEach(
                                         function (v) {
-                                                for (var j = 0, jl = values.length; j < jl; ++j) {
-                                                        if (this.hasClass(values[j], v)) this.removeClass(values[j], v)
-                                                        else this.addClass(values[j], v);
+                                                for (var j = 0; j < values.length; ++j) {
+                                                        if (context.hasClass(values[j], v)) context.removeClass(values[j], v)
+                                                        else context.addClass(values[j], v);
                                                 }
-                                        }, this
-                                )
+                                        }, context
+                                );
                         }
                         return this;
                 },
 
                 /**
                  * for each node in context
-                 *		sets or clears the specified style property
+                 *      sets or clears the specified style property
                  * e.g. $css('.red').setStyle('color', '#FF0000'); // sets the style
                  * e.g. $css('.red').setStyle('color', ); // clears the style
                  */
                 setStyle: function (property, value, context) {
                         if (property) {
-                                var context = (context) ? CSSAssist(context) : this
+                                var context = (context) ? CSSAssist(context) : this;
                                 context.forEach(
                                         function (v) {
                                                 if (value) v.style[property] = value;
                                                 else v.style[property] = '';
-                                        }, this
-                                )
+                                        }, context
+                                );
                         }
                         return this;
                 },
 
                 /**
                  * for each node in context
-                 *		sets or clears the specified style property
+                 *      sets or clears the specified style property
                  * e.g. $css('.red').setStyle('color', '#FF0000'); // sets the style
                  * e.g. $css('.red').setStyle('color', ); // clears the style
                  */
                 setAttr: function (attr, value, context) {
                         if (attr) {
-                                var context = (context) ? CSSAssist(context) : this
+                                var context = (context) ? CSSAssist(context) : this;
                                 context.forEach(
                                         function (v) {
                                                 if (value) v.setAttribute(attr, value);
                                                 else v.removeAttribute(attr);
-                                        }, this
-                                )
+                                        }, context
+                                );
                         }
                         return this;
                 },
@@ -248,21 +249,24 @@
         // Give the init method the CSSAssist prototype for later instantiation
         CSSAssist.fn.init.prototype = CSSAssist.fn;
 
-})(this) // end closure, window = this
+})() // end self-invoking function
 
-// event listener methods asthis plugins
+/**
+ * Event Listeners (as plugins)
+ */
+
 
 /**
  * Add an event listener to each node in context
  */
-CSSAssist.fn.on = CSSAssist.fn.addEventListener = function (type, listener, useCapture) {
+CSSAssist.fn.addListener = function (type, listener, useCapture) {
         if (type && listener) {
                 var capture = useCapture || false;
                 this.forEach(
                         function (v) {
                                 v.addEventListener(type, listener, capture);
                         }
-                )
+                );
         }
         return this;
 };
@@ -270,14 +274,56 @@ CSSAssist.fn.on = CSSAssist.fn.addEventListener = function (type, listener, useC
 /**
  * Remove an event listener from each node in context
  */
-CSSAssist.fn.off = CSSAssist.fn.removeEventListener = function (type, listener, useCapture) {
+CSSAssist.fn.removeListener = function (type, listener, useCapture) {
         if (type && listener) {
                 var capture = useCapture || false;
                 this.forEach(
                         function (v) {
                                 v.removeEventListener(type, listener, capture);
                         }, this
-                )
+                );
         }
         return this;
 };
+
+
+/**
+ * Set operations (as plugins)
+ */
+
+// unique function (returns an array not a CSSAssist object)
+CSSAssist.fn.unique = function ( ) {
+    var unique= [];
+    for (var i = 0; i < this.length; i += 1) {
+        if (unique.indexOf(this[i]) == -1) {
+            unique.push(this[i]);
+        }
+    }
+    return CSSAssist( unique );
+}
+
+// union (concat)
+CSSAssist.fn.union = function ( arrayObj ) {
+        if (arrayObj) {
+            return CSSAssist( [].concat.call(this, arrayObj) ).unique();
+        }
+}
+
+// intersection (brute force)
+CSSAssist.fn.intersects = function ( arrayObj ) {
+        if (arrayObj) {
+                var ret = [];
+                this.forEach(
+                    function (v) {
+                        for (var z = 0; z < arrayObj.length; z++) {
+                            if (v == arrayObj[z]) {
+                                ret.push(v);
+                                break;
+                            }
+                        }
+                    }
+                );
+                return CSSAssist(ret).unique();
+        }
+        return this;
+}
