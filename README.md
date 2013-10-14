@@ -167,16 +167,15 @@
                  * e.g. $css('.red').setStyle('color', ); // clears the style
                  */
                 setStyle: function (property, value, context) {
-                        var context = (context) ? CSSAssist(context) : this;
-                        context.forEach(
-                                function (v) {
-                                        if (!property) v.removeAttribute('style')
-                                        else {
-                                            if (value) v.style[property] = value;
-                                            else v.style[property] = '';
+                        if (property) {
+                                var context = (context) ? CSSAssist(context) : this;
+                                context.forEach(
+                                        function (v) {
+                                                if (value) v.style[property] = value;
+                                                else v.style[property] = '';
                                         }
-                                }
-                        );
+                                );
+                        }
                         return this;
                 },
 
