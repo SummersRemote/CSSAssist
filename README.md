@@ -1,161 +1,345 @@
-NOTE
-=====
+/* Copyright 2013 William Summers, Metatribal Research
+ * adapted from https://developer.mozilla.org/en-US/docs/JXON
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-I am prepping version 2 for release.  Version 2 boasts better performance, cleaner code, and two new methods.  The documentation below has not been updated to reflect the changes (soon), but there are comments and examples in the source.
+/**
+ * @author William Summers
+ *
+ * CSSAssist provides a minimal set of methods for working with CSS
+ * Browser support is limited by the availability of
+ *            querySelector (http://caniuse.com/queryselector)
+ *            add/removeEventListener (ie9+, most others support)
+ */
+// create a self-invoking function
+;
+(function () {
 
-CSSAssist
-=========
+        // this is the main object
+        CSSAssist = function (selector, context) {
+                return new CSSAssist.fn.init(selector);
+        };
 
-CSSAssist is a small (~2.5kb minified, <1kb gzipped) JavaScript library for working with CSS.
+        CSSAssist.version = '2.1.3';
 
-> It is amazing what you can do with a simple responsive grid and a handful of JavaScript methods!
+        // define the CSSAssist prototype
+        CSSAssist.fn = CSSAssist.prototype = {
 
-I am a long standing fan of [jQuery](http://jquery.com/) and more recently [AngularJS](http://angularjs.org/) and frequently rely on them.  I have, however, come to realize that there are times when they are simply too much and that I desire a smaller library and smaller footprint.  CSSAssist provides methods for working with stylesheets. Period.  It does NOT provide methods for manipulating the style attribute on a node, appending and prepending, ajax, ... - if you need those things, I highly recommend [jQuery](http://jquery.com/) or [AngularJS](http://angularjs.org/).
+                /**
+                 * CSSAssist
+                 *
+                 */
+                init: function (selector) {
 
-Support is [limited to browsers](http://caniuse.com/queryselector) which provide the querySelector API and the add/removeEventListener API; which includes most modern desktop and mobile browsers as well as IE9+.
+                        // if no selector, return empty array
+                        if (!selector) return this;
+                        // got a function 
+                        else if (typeof (selector) == 'function') return selector(CSSAssist);
+                        // got self
+                        else if (selector instanceof CSSAssist) return selector;
+                        else {
+                                var context;
+                                if (selector instanceof Array) context = selector;
+                                // wrap dom nodes.
+                                else if (typeof selector === 'object') context = [selector];
+                                // if its a string (CSS selector)
+                                else if (typeof selector === 'string') {
+                                        context = [].slice.call(document.querySelectorAll(selector));
+                                } else context = [];
 
-Enjoy!
-Use
-===
-CSSAssist provides a [fluent API](http://en.wikipedia.org/wiki/Fluent_interface) similiar to jQuery and relies on the CSS selector syntax for selecting DOM elements.
+                                // set the prototype for the context tp CSSAssist and return
+                                context.__proto__ = CSSAssist.fn;
+                                return context;
+                        }
 
-```javascript
-$css()                         // select the window object
-$css('')                       // select the window.document object
-$css('*')                      // select all nodes in the document
-$css('p.myAwesomeClass')       // select all <p> nodes with the class .myAwesomeClass
-$css('body > div')             // select all <div> nodes that are a child of <body>
-$css('div > p:nth-child(3n)')  // select every 3rd <p> node of each <div> node
-```
+                },
 
-For more information on CSS selectors:
-* [W3Schools Selector Reference](http://www.w3schools.com/cssref/css_selectors.asp)
-* [MDN reference on :pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes)
-* [The W3C Selector Level 3 Spec](http://www.w3.org/TR/css3-selectors/)
+                // simple forEach loop (faster than native...)
+                forEach: function (func, context) {
+                        for (var i = 0; i < this.length; ++i) {
+                                func.call(this, this[i]);
+                        }
+                },
 
-Methods
-=========
-Methods which accept either "classList" or "attrList" will accept either an array of string values or a space delimited string of values. For example, each of the following hasClass() calls will return the same result.
+                /**
+                 * Returns true if each node in the context containes each class in values
+                 * Returns false otherwise.
+                 * values may be either a space delimited string or an array
+                 * e.g. $css('div').hasClass('myAwesomeStyle');
+                 */
+                hasClass: function (values, context) {
+                        if (!values) values ='';
+                        var context = (context) ? CSSAssist(context) : this,
+                                values = makeArray(values);
+                        for (var i = 0; i < context.length; ++i) {
+                                var className = (' ' + context[i].className + ' ').replace(rSpace, ' ');
+                                for (var j = 0; j < values.length; ++j) {
+                                        if ((className.indexOf(' ' + values[j] + ' ') < 0)) return false;
+                                }
+                        }
+                        return true;
 
-```javascript
-var asString = 'myAwesomeClass someOtherClass';
-var asArray = ['myAwesomeClass','someOtherClass'];
+                },
 
-$css('div').hasClass(asString);
-$css('div').hasClass(asArray);
-$css('div').hasClass('myAwesomeClass someOtherClass');
-```
+                /**
+                 * Adds each class in values to each node in context
+                 * values may be either a space delimited string or an array
+                 * e.g. $css('div').addClass('myAwesomeStyle');
+                 */
+                addClass: function (values, context) {
+                        if (values) {
+                                var context = (context) ? CSSAssist(context) : this,
+                                        values = makeArray(values);
+                                context.forEach(
+                                        function (v) {
+                                                for (var j = 0; j < values.length; ++j) {
+                                                        if (!context.hasClass(values[j], v)) v.className += ' ' + values[j];
+                                                }
+                                        }
+                                );
+                        }
+                        return this;
+                },
 
-hasClass(classList)
--------------------
-The hasClass() method return true if and only if each node in the context has each class in the classList.  For instance
+                /**
+                 * Removes each class in values from each node in context
+                 * values may be either a space delimited string or an array
+                 * e.g. $css('div').removeClass('myAwesomeStyle');
+                 */
+                removeClass: function (values, context) {
+                        var context = (context) ? CSSAssist(context) : this,
+                                values = makeArray(values);
+                        context.forEach(
+                                function (v) {
+                                        if (values) {
+                                                var className = (' ' + v.className + ' ').replace(rSpace, ' ');
+                                                for (var j = 0; j < values.length; ++j) {
+                                                        while (className.indexOf(' ' + values[j] + ' ') > -1) {
+                                                                className = className.replace(' ' + values[j] + ' ', ' ');
+                                                        }
+                                                }
+                                                v.className = className.trim();
+                                        } else v.removeAttribute('class');
+                                }
+                        );
 
-```javascript
-$css('div').hasClass('myAwesomeClass')
-```
+                        return this;
+                },
 
-returns true if and only if ALL &lt;div&gt; nodes have the class "myAwesomeClass".
+                /**
+                 * For each class in values for each node in context
+                 *    if the class is present, remove it
+                 *    if the class is not present, add it
+                 * values may be either a space delimited string or an array
+                 * e.g. $css('div').toggleClass('myAwesomeStyle');
+                 */
+                toggleClass: function (values, context) {
+                        if (values) {
+                                var context = (context) ? CSSAssist(context) : this,
+                                        values = makeArray(values);
+                                context.forEach(
+                                        function (v) {
+                                                for (var j = 0; j < values.length; ++j) {
+                                                        if (context.hasClass(values[j], v)) context.removeClass(values[j], v)
+                                                        else context.addClass(values[j], v);
+                                                }
+                                        }
+                                );
+                        }
+                        return this;
+                },
 
-addClass(classList)
---------------------
-The addClass() method adds each class in classList to each node in the context. For example,
+                /**
+                 * for each node in context
+                 *      sets or clears the specified style property
+                 * e.g. $css('.red').setStyle('color', '#FF0000'); // sets the style
+                 * e.g. $css('.red').setStyle('color', ); // clears the style
+                 */
+                setStyle: function (property, value, context) {
+                        if (property) {
+                                var context = (context) ? CSSAssist(context) : this;
+                                context.forEach(
+                                        function (v) {
+                                                if (value) v.style[property] = value;
+                                                else v.style[property] = '';
+                                        }
+                                );
+                        }
+                        return this;
+                },
 
-```javascript
-$css('div').addClass('myAwesomeClass')
-```
+                /**
+                 * for each node in context
+                 *      sets or clears the specified style property
+                 * e.g. $css('.red').setStyle('color', '#FF0000'); // sets the style
+                 * e.g. $css('.red').setStyle('color', ); // clears the style
+                 */
+                setAttr: function (attr, value, context) {
+                        if (attr) {
+                                var context = (context) ? CSSAssist(context) : this;
+                                context.forEach(
+                                        function (v) {
+                                                if (value) v.setAttribute(attr, value);
+                                                else v.removeAttribute(attr);
+                                        }
+                                );
+                        }
+                        return this;
+                },
 
-adds the class "myAwesomeClass" to every &lt;div&gt; in the document.
 
-removeClass(classList)
------------------------
-The removeClass() method removes each class in classList from each node in the context. For example,
+                /**
+                 * Add an event listener to each node in context
+                 */
+                addListener: function (type, listener, useCapture) {
+                        if (type && listener) {
+                                var capture = useCapture || false;
+                                this.forEach(
+                                        function (v) {
+                                                v.addEventListener(type, listener, capture);
+                                        }
+                                );
+                        }
+                        return this;
+                },
 
-```javascript
-$css('div').removeClass('myAwesomeClass')
-```
+                /**
+                 * Remove an event listener from each node in context
+                 */
+                removeListener: function (type, listener, useCapture) {
+                        if (type && listener) {
+                                var capture = useCapture || false;
+                                this.forEach(
+                                        function (v) {
+                                                v.removeEventListener(type, listener, capture);
+                                        }
+                                );
+                        }
+                        return this;
+                },
 
-removes the class "myAwesomeClass" from every &lt;div&gt; in the document.
 
-toggleClass(classList)
-----------------------
-The toggleClass() method toggles each class in classList for each node in the context. For example,
+                /**
+                 * Load an external CSS file
+                 * e.g. $css().loadCSSLink('http://meyerweb.com/eric/tools/css/reset/reset.css');
+                 */
+                loadCSS: function (url) {
+                        if (url) {
+                                var head = document.getElementsByTagName('head')[0],
+                                        link = document.createElement('link');
+                                link.type = 'text/css';
+                                link.rel = 'stylesheet';
+                                link.href = url;
+                                head.appendChild(link);
+                                return this;
+                        }
+                        return this;
+                },
 
-```javascript
-$css('div').toggleClass('myAwesomeClass')
-```
+                /**
+                 * Inject a programmatically created stylesheet
+                 * styles is a string containing css rules to be injected
+                 * e.g $css().loadCSS( 'body { background-color: red;} div { background-color: yellow;}' );
+                 */
+                createCSS: function (styles) {
+                        if (styles) {
+                                var head = document.getElementsByTagName('head')[0],
+                                        styleNode = document.createElement('style');
+                                styleNode.type = 'text/css';
+                                if (styleNode.styleSheet) styleNode.styleSheet.cssText = styles;
+                                else styleNode.appendChild(document.createTextNode(styles));
+                                head.appendChild(styleNode);
+                        }
+                        return this;
+                }
 
-would add the class "myAwesomeClass" to every &lt;div&gt; which did not already contain it and remove "myAwesomeClass" from every &lt;div&gt; node that has it.
+        };
 
-clearAttr(attrList)
----------------------
-The clearAttr() method removes each attribute in attrList from each node in the context.  For example,
+        // regex for collapsing space and newlines
+        var rSpace = /[\s+\t\r\n\f]/g;
 
-```javascript
-$css('div').clearAttr('class style');
-```
+        /**
+         * Utility method to coerce a space delimited string into an array
+         */
+        makeArray = function (values) {
+                if (values instanceof Array) return values
+                else if (typeof values === 'string') return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
+                else return [];
+        };
 
-would remove the "class" and "style" attributes from every &lt;div&gt; node in the document.
+        // Give the init method the CSSAssist prototype for later instantiation
+        CSSAssist.fn.init.prototype = CSSAssist.fn;
 
-loadCSS(url)
------------------
-The loadCSS() method loads an external CSS file (referenced by url) by creating and inserting an appropriate &lt;script&gt; element.  The context is not relevant.  For example,
+})() // end self-invoking function
 
-```javascript
-$css().loadCSS('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css');
-```
 
-would like the Normalize CSS stylesheet from [CDNJS](http://cdnjs.com/).
+/**
+ * Set operations (as plugins)
+ */
 
-createCSS(styles)
-----------------
-The createCSS() method loads a programmatically constructed stylesheet. The context is not relevant. For example,
-
-```javascript
-var myStyles = "body { background-color: red;} div { background-color: yellow;}";
-$css().createCSS(myStyles);
-```
-Event Listeners
-===============
-The cssassist.js file also includes two methods for binding events.  They are implemented as CSSAssist extensions and wrap the add/removeListener methods such that the provided listener is added to each node in the context.
-The following links are good resources for events:
-* [MDN Reference fo DOM events](https://developer.mozilla.org/en-US/docs/Web/Reference/Events)
-* [MDN Reference for window events](https://developer.mozilla.org/en-US/docs/Web/API/Window#Event_handlers)
-
-addEventListener(type, listener, useCapture)
---------------------------------------------
-The addEventListener() method adds the specified listener to all nodes in the context.  For example,
-
-```javascript
-var myListener = function (event) {
-  this.style.visibility='hidden';
-};
-
-$css('div.makeInvisible').addEventListener('click', myListener );
-```
-adds the event listener, myListener, to the click event of all &lt;div&gt; nodes with the class "makeInvisible".
-
-removeEventListener(type, listener, useCapture)
-------------------------------------------------
-The removeEventListener() method removes the specified listener from all nodes in the context.  For example,
-
-```javascript
-$css('div.makeInvisible').removeEventListener('click', myListener );
-```
-removes the event listener, myListener, from the click event of all &lt;div&gt; nodes with the class "makeInvisible".  The event will no longer fire when the &lt;div&gt; is clicked.
-
-Plugins
-=======
-CSSAssist can be extended by providing new methods on the CSSAssist prototype.
-
-```javascript
-$css.fn.makeRed = function () {                  // add "makeRed" to the CSSAssist prototype
-        for (var i = 0; i < this.length; i++) {  // loop over each node in the context
-                this[i].style.color = 'red';     // do something
+// unique function (returns an array not a CSSAssist object)
+CSSAssist.fn.unique = function (context) {
+        var context = (context) ? CSSAssist(context) : this;
+        var unique = [];
+        for (var i = 0; i < context.length; i += 1) {
+                if (unique.indexOf(context[i]) < 0) {
+                        unique.push(context[i]);
+                }
         }
-        return this;                             // return "this"
+        return CSSAssist(unique);
 }
-```
 
-License
-=======
-CSSAssist is copyright William Summers (metatribal) and is available under the Apache License v2.0
+// union (concat)
+CSSAssist.fn.union = function (arrayObj, context) {
+        var context = (context) ? CSSAssist(context) : this;
+        if (arrayObj) {
+                return CSSAssist([].concat.call(context, arrayObj)).unique();
+        }
+}
+
+// intersection (brute force)
+CSSAssist.fn.intersects = function (arrayObj, context) {
+        var context = (context) ? CSSAssist(context) : this;
+        if (arrayObj) {
+                var ret = [];
+                context.forEach(
+                        function (v) {
+                                for (var i = 0; i < arrayObj.length; ++i) {
+                                        if (v == arrayObj[i]) {
+                                                ret.push(v);
+                                                break;
+                                        }
+                                }
+                        }
+                );
+                return CSSAssist(ret).unique();
+        }
+        return this;
+}
+// difference
+CSSAssist.fn.difference = function (arrayObj, context) {
+        var context = (context) ? CSSAssist(context) : this;   
+        if (arrayObj) {
+                var ret = []
+                var all = context.union(arrayObj);
+                for (i = 0; i < all.length; ++i) {
+                        var v = all[i];
+                        if (([].indexOf.call(context, v) > -1) != ([].indexOf.call(arrayObj, v) > -1)) {
+                                ret.push(v)
+                        }
+                }
+                return CSSAssist(ret);
+        }
+        return this;
+}
