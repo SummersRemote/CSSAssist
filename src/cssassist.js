@@ -31,7 +31,7 @@
                 return new CSSAssist.fn.init(selector);
         };
 
-        CSSAssist.version = '2.1.5';
+        CSSAssist.version = '2.1.3';
 
         // define the CSSAssist prototype
         CSSAssist.fn = CSSAssist.prototype = {
@@ -79,18 +79,17 @@
                  * e.g. $css('div').hasClass('myAwesomeStyle');
                  */
                 hasClass: function (values, context) {
-                        if (!values) return false;
-                        else {
-                                var context = (context) ? CSSAssist(context) : this,
-                                        values = makeArray(values);
-                                for (var i = 0; i < context.length; ++i) {
-                                        var className = (' ' + context[i].className + ' ').replace(rSpace, ' ');
-                                        for (var j = 0; j < values.length; ++j) {
-                                                if ((className.indexOf(' ' + values[j] + ' ') < 0)) return false;
-                                        }
+                        if (!values) values ='';
+                        var context = (context) ? CSSAssist(context) : this,
+                                values = makeArray(values);
+                        for (var i = 0; i < context.length; ++i) {
+                                var className = (' ' + context[i].className + ' ').replace(rSpace, ' ');
+                                for (var j = 0; j < values.length; ++j) {
+                                        if ((className.indexOf(' ' + values[j] + ' ') < 0)) return false;
                                 }
-                                return true;
                         }
+                        return true;
+
                 },
 
                 /**
@@ -183,8 +182,8 @@
                 /**
                  * for each node in context
                  *      sets or clears the specified style property
-                 * e.g. $css('.red').setStyle('color', '#FF0000'); // sets the style
-                 * e.g. $css('.red').setStyle('color', ); // clears the style
+                 * e.g. $css('span').setAttr('data-src', 'my data source'); // sets the style
+                 * e.g. $css('span').setAttr('data-src', ); // clears the style
                  */
                 setAttr: function (attr, value, context) {
                         if (attr) {
