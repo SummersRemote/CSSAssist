@@ -31,7 +31,7 @@
                 return new CSSAssist.fn.init(selector);
         };
 
-        CSSAssist.version = '2.3.1';
+        CSSAssist.version = '2.1.5';
 
         // define the CSSAssist prototype
         CSSAssist.fn = CSSAssist.prototype = {
@@ -43,7 +43,7 @@
                 init: function (selector) {
 
                         // if no selector, return empty array
-                        if (!selector) return [];
+                        if (!selector) return this;
                         // got a function 
                         else if (typeof (selector) == 'function') return selector(CSSAssist);
                         // got self
@@ -290,28 +290,31 @@
  */
 
 // unique function (returns an array not a CSSAssist object)
-CSSAssist.fn.unique = function () {
+CSSAssist.fn.unique = function (context) {
+        var context = (context) ? CSSAssist(context) : this;
         var unique = [];
-        for (var i = 0; i < this.length; i += 1) {
-                if (unique.indexOf(this[i]) < 0) {
-                        unique.push(this[i]);
+        for (var i = 0; i < context.length; i += 1) {
+                if (unique.indexOf(context[i]) < 0) {
+                        unique.push(context[i]);
                 }
         }
         return CSSAssist(unique);
 }
 
 // union (concat)
-CSSAssist.fn.union = function (arrayObj) {
+CSSAssist.fn.union = function (arrayObj, context) {
+        var context = (context) ? CSSAssist(context) : this;
         if (arrayObj) {
-                return CSSAssist([].concat.call(this, arrayObj)).unique();
+                return CSSAssist([].concat.call(context, arrayObj)).unique();
         }
 }
 
 // intersection (brute force)
-CSSAssist.fn.intersects = function (arrayObj) {
+CSSAssist.fn.intersects = function (arrayObj, context) {
+        var context = (context) ? CSSAssist(context) : this;
         if (arrayObj) {
                 var ret = [];
-                this.forEach(
+                context.forEach(
                         function (v) {
                                 for (var i = 0; i < arrayObj.length; ++i) {
                                         if (v == arrayObj[i]) {
@@ -325,15 +328,15 @@ CSSAssist.fn.intersects = function (arrayObj) {
         }
         return this;
 }
-
 // difference
-CSSAssist.fn.difference = function (arrayObj) {
+CSSAssist.fn.difference = function (arrayObj, context) {
+        var context = (context) ? CSSAssist(context) : this;   
         if (arrayObj) {
-                var ret = [],
-                    all = this.union(arrayObj);
+                var ret = []
+                var all = context.union(arrayObj);
                 for (i = 0; i < all.length; ++i) {
                         var v = all[i];
-                        if (([].indexOf.call(this, v) > -1) != ([].indexOf.call(arrayObj, v) > -1)) {
+                        if (([].indexOf.call(context, v) > -1) != ([].indexOf.call(arrayObj, v) > -1)) {
                                 ret.push(v)
                         }
                 }
