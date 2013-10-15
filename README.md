@@ -1,4 +1,3 @@
-
 CSSAssist v2
 ============
 
@@ -6,6 +5,18 @@ CSSAssist v2
 
 
 CSSAssist v2 is a lean (3kb minified, 1kb gzipped), extensible JavaScript library which provides a lightweight wrapper around the JavaScript [querySelector method](https://developer.mozilla.org/en-US/docs/Web/API/Document.querySelectorAll) and a handful of operations for manipulating [CSS](http://en.wikipedia.org/wiki/Cascading_Style_Sheets).  CSSAssist is intended for modern mobile, tablet, and desktop browsers and works well on recent versions of all major dektop and mobile browsers including IE 9+.  If you require support for older browsers or a larger feature set, I highly recomment the excellent [jQuery](http://jquery.com/) and [AngularJS](http://angularjs.org/) projects.
+
+Provided Methods
+-----------------
+Chainable Methods
+- forEach
+- hasClass, addClass, removeClass, toggleClass
+- setStyle, setAttr
+- addListener, removeListener
+- unique, union, intersects, difference
+Non-chainable/utility methods
+- makeArray
+- loadCSS, createCSS
 
 Use
 ===
