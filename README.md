@@ -14,6 +14,7 @@ Chainable Methods
 - setStyle, setAttr
 - addListener, removeListener
 - unique, union, intersects, difference
+
 Non-chainable/utility methods
 - makeArray
 - loadCSS, createCSS
