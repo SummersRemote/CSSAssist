@@ -53,13 +53,12 @@
                  *
                  */
                 init: function (selector) {
-
-                        // if no selector, return empty array
-                        if (!selector) return this;
+                        var context = [];
+                        // if no selector, pass 
+                        if (!selector) context = [];
                         // got self
                         else if (selector instanceof CSSAssist) return selector;
                         else {
-                                var context;
                                 // if an array
                                 if (selector instanceof Array) context = selector;
                                 // wrap dom nodes.
@@ -67,12 +66,12 @@
                                 // if its a string (CSS selector)
                                 else if (typeof selector === 'string') {
                                         context = [].slice.call(document.querySelectorAll(selector));
-                                } else context = [];
-
-                                // set the prototype for the context tp CSSAssist and return
-                                context.__proto__ = _.fn;
-                                return context;
+                                }
                         }
+
+                        // set the prototype for the context tp CSSAssist and return
+                        context.__proto__ = _.fn;
+                        return context;
 
                 },
 
