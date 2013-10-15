@@ -1,5 +1,4 @@
 
-
 CSSAssist v2
 ============
 
@@ -125,21 +124,19 @@ CSSAssist('span').setAttr('data-myData', 'some good data')  // sets the attribut
 
 loadCSS(url)
 -----------------
-The loadCSS() method loads an external CSS file (referenced by url) by creating and inserting an appropriate &lt;script&gt; element.  The context is not relevant.  For example,
+The loadCSS() method loads an external CSS file (referenced by url) by creating and inserting an appropriate &lt;script&gt; element.  The context is not relevant and should be called like this
 
 ```javascript
-CSSAssist().loadCSS('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css');
+CSSAssist.loadCSS('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css');
 ```
-
-would load the Normalize CSS stylesheet from [CDNJS](http://cdnjs.com/).
 
 createCSS(styles)
 ----------------
-The createCSS() method loads a programmatically constructed stylesheet. The context is not relevant. For example,
+The createCSS() method loads a programmatically constructed stylesheet. The context is not relevant and should be called as
 
 ```javascript
 var myStyles = "body { background-color: red;} div { background-color: yellow;}";
-CSSAssist().createCSS(myStyles);
+CSSAssist.createCSS(myStyles);
 ```
 
 Event Listeners
