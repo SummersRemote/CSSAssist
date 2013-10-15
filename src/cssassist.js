@@ -55,8 +55,6 @@
 
                         // if no selector, return empty array
                         if (!selector) return this;
-                        // got a function 
-                        else if (typeof (selector) == 'function') return selector(CSSAssist);
                         // got self
                         else if (selector instanceof CSSAssist) return selector;
                         else {
@@ -81,6 +79,7 @@
                         for (var i = 0; i < this.length; ++i) {
                                 func.call(this, this[i]);
                         }
+                        return this;
                 },
 
                 /**
@@ -90,7 +89,7 @@
                  * e.g. CSSAssist('div').hasClass('myAwesomeStyle');
                  */
                 hasClass: function (values, context) {
-                        if (!values) values ='';
+                        if (!values) values =' ';
                         var context = (context) ? CSSAssist(context) : this,
                                 values = CSSAssist.makeArray(values);
                         for (var i = 0; i < context.length; ++i) {
@@ -129,8 +128,8 @@
                  * e.g. CSSAssist('div').removeClass('myAwesomeStyle');
                  */
                 removeClass: function (values, context) {
-                        var context = (context) ? CSSAssist(context) : this,
-                                values = CSSAssist.makeArray(values);
+                        var context = (context) ? CSSAssist(context) : this;
+                        if (values) values = CSSAssist.makeArray(values);
                         context.forEach(
                                 function (v) {
                                         if (values) {
@@ -158,7 +157,7 @@
                 toggleClass: function (values, context) {
                         if (values) {
                                 var context = (context) ? CSSAssist(context) : this,
-                                        values = CSSAssist.makeArray(values);
+                                    values = CSSAssist.makeArray(values);
                                 context.forEach(
                                         function (v) {
                                                 for (var j = 0; j < values.length; ++j) {
