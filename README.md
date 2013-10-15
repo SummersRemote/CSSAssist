@@ -200,15 +200,17 @@ difference([context])
 
 Plugins
 =======
-CSSAssist can be extended by providing new methods on the CSSAssist prototype.
+CSSAssist can be extended by providing new methods on the CSSAssist prototype.  When possible, return "this" to enable the method to be chained.
 
 ```javascript
-CSSAssist.fn.makeRed = function () {                  // add "makeRed" to the CSSAssist prototype
+;(function (CSSAssist) {
+    CSSAssist.fn.makeRed = function () {         // add "makeRed" to the CSSAssist prototype
         for (var i = 0; i < this.length; i++) {  // loop over each node in the context
                 this[i].style.color = 'red';     // do something
         }
         return this;                             // return "this"
-}
+    }
+})(CSSAssist);
 ```
 
 License
