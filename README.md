@@ -19,6 +19,10 @@ Non-chainable/utility methods
 - makeArray
 - loadCSS, createCSS
 
+Tests
+-----
+[Jasmine Tests](https://raw.github.com/metatribal/CSSAssist/master/test/SpecRunner.html)
+
 Use
 ===
 
