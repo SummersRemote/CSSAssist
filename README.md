@@ -78,7 +78,7 @@ CSSAssist('div').hasClass(asArray);
 CSSAssist('div').hasClass('myAwesomeClass someOtherClass');
 ```
 
-hasClass(values[, context])
+hasClass([values[, context]])
 -------------------------------
 The hasClass() method return true if and only if each node in the context has each class in the values list.  For instance
 
@@ -97,7 +97,7 @@ CSSAssist('div').addClass('myAwesomeClass')             // add myAwesome class t
 CSSAssist('div.foo').addClass('aClass bClass')          // add aClass and bClass to all divs which have the class foo
 ```
 
-removeClass(values[, context])
+removeClass([values[, context]])
 -----------------------
 The removeClass() method removes each class in classList from each node in the context. For example,
 
@@ -129,7 +129,7 @@ setAttr(values[, context])
 The setAttr() method will set or remove the specified attribute (only one) for each node in the context.
 
 ```javascript
-CSSAssist('*').setAttr('style')               // remove the style attributes from all nodes
+CSSAssist('*').setAttr('style')                     // remove the style attributes from all nodes
 CSSAssist('span').setAttr('data-myData')            // removes the attribute data-myData from all spans
 CSSAssist('span').setAttr('data-myData', 'some good data')  // sets the attribute data-myData to 'some good data' for all spans
 ```
