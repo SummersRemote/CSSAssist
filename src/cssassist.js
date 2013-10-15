@@ -45,7 +45,7 @@
         // _ version number
         _.version = '2.0.0-alpha';
 
-        // define the _ prototype
+        // define the CSSAssist prototype
         _.fn = _.prototype = {
 
                 /**
@@ -323,7 +323,7 @@
         _.makeArray = function (values) {
                 if (!values) return []
                 if (values instanceof Array) return values
-                else if (typeof values === 'string') return values.replace(/^\s+|\s+_/g, '').split(/\s+/);
+                else if (typeof values === 'string') return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
                 else return this;
         };
 
