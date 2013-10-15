@@ -114,9 +114,9 @@
                                 var context = (context) ? _(context) : this,
                                         values = _.makeArray(values);
                                 context.forEach(
-                                        function (v) {
+                                        function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
-                                                        if (!context.hasClass(values[j], v)) v.className += ' ' + values[j];
+                                                        if (!context.hasClass(values[j], item)) item.className += ' ' + values[j];
                                                 }
                                         }
                                 );
@@ -133,16 +133,16 @@
                         var context = (context) ? _(context) : this;
                         if (values) values = _.makeArray(values);
                         context.forEach(
-                                function (v) {
+                                function (item) {
                                         if (values) {
-                                                var className = (' ' + v.className + ' ').replace(rSpace, ' ');
+                                                var className = (' ' + item.className + ' ').replace(rSpace, ' ');
                                                 for (var j = 0; j < values.length; ++j) {
                                                         while (className.indexOf(' ' + values[j] + ' ') > -1) {
                                                                 className = className.replace(' ' + values[j] + ' ', ' ');
                                                         }
                                                 }
-                                                v.className = className.trim();
-                                        } else v.removeAttribute('class');
+                                                item.className = className.trim();
+                                        } else item.removeAttribute('class');
                                 }
                         );
 
@@ -161,10 +161,10 @@
                                 var context = (context) ? _(context) : this,
                                     values = _.makeArray(values);
                                 context.forEach(
-                                        function (v) {
+                                        function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
-                                                        if (context.hasClass(values[j], v)) context.removeClass(values[j], v)
-                                                        else context.addClass(values[j], v);
+                                                        if (context.hasClass(values[j], item)) context.removeClass(values[j], item)
+                                                        else context.addClass(values[j], item);
                                                 }
                                         }
                                 );
@@ -182,9 +182,9 @@
                         if (property) {
                                 var context = (context) ? _(context) : this;
                                 context.forEach(
-                                        function (v) {
-                                                if (value) v.style[property] = value;
-                                                else v.style[property] = '';
+                                        function (item) {
+                                                if (value) item.style[property] = value;
+                                                else item.style[property] = '';
                                         }
                                 );
                         }
@@ -201,9 +201,9 @@
                         if (attr) {
                                 var context = (context) ? _(context) : this;
                                 context.forEach(
-                                        function (v) {
-                                                if (value) v.setAttribute(attr, value);
-                                                else v.removeAttribute(attr);
+                                        function (item) {
+                                                if (value) item.setAttribute(attr, value);
+                                                else item.removeAttribute(attr);
                                         }
                                 );
                         }
@@ -240,10 +240,10 @@
                         if (arrayObj) {
                                 var ret = [];
                                 context.forEach(
-                                        function (v) {
+                                        function (item) {
                                                 for (var i = 0; i < arrayObj.length; ++i) {
-                                                        if (v == arrayObj[i]) {
-                                                                ret.push(v);
+                                                        if (item == arrayObj[i]) {
+                                                                ret.push(item);
                                                                 break;
                                                         }
                                                 }
@@ -260,12 +260,14 @@
                         if (arrayObj) {
                                 var ret = []
                                 var all = context.union(arrayObj);
-                                for (i = 0; i < all.length; ++i) {
-                                        var v = all[i];
-                                        if (([].indexOf.call(context, v) > -1) != ([].indexOf.call(arrayObj, v) > -1)) {
-                                                ret.push(v)
+                                all.forEach(
+                                    function (item) {
+                                        //var item = all[i];
+                                        if (([].indexOf.call(context, item) > -1) != ([].indexOf.call(arrayObj, item) > -1)) {
+                                                ret.push(item)
                                         }
-                                }
+                                    }
+                                ); 
                                 return _(ret);
                         }
                         return this;
@@ -278,8 +280,8 @@
                         if (type && listener) {
                                 var capture = useCapture || false;
                                 this.forEach(
-                                        function (v) {
-                                                v.addEventListener(type, listener, capture);
+                                        function (item) {
+                                                item.addEventListener(type, listener, capture);
                                         }
                                 );
                         }
@@ -293,8 +295,8 @@
                         if (type && listener) {
                                 var capture = useCapture || false;
                                 this.forEach(
-                                        function (v) {
-                                                v.removeEventListener(type, listener, capture);
+                                        function (item) {
+                                                item.removeEventListener(type, listener, capture);
                                         }
                                 );
                         }
@@ -303,7 +305,7 @@
 
         };  // end prototype
 
-        // regex for collapsing space and newlines
+        // regex for collapsing space, tabs, returns, and newlines to single space
         var rSpace = /[\s+\t\r\n\f]/g;
 
         /** 
