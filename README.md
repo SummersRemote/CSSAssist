@@ -124,7 +124,7 @@ CSSAssist('span').setStyle('color')             // clears the color style on all
 CSSAssist('p.big').setStyle('fontSize', '2em')  // sets the font size to 2em for all paragraphs with the class big
 ```
 
-setAttr(values[, context])
+setAttr(attr[, value[, context]])
 ---------------------
 The setAttr() method will set or remove the specified attribute (only one) for each node in the context.
 
