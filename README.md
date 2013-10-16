@@ -213,6 +213,12 @@ CSSAssist can be extended by providing new methods on the CSSAssist prototype.  
 })(CSSAssist);
 ```
 
+Unit Testing
+--------------
+Unit tests are written using the [Jasmine Test Framework](http://pivotal.github.io/jasmine/).
+
+[CSSAssist Test Results](https://rawgithub.com/metatribal/CSSAssist/master/test/SpecRunner.html)
+
 License
 =======
 CSSAssist is copyright William Summers (metatribal) and is available under the Apache License v2.0
