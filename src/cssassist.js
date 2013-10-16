@@ -34,11 +34,11 @@
  */
 
 // create a self-invoking function
-;(function () {
+(function () {
 
         // this is the main object
         // internally assigned to _ to enhance compressor performance
-        var _ = CSSAssist = function (selector, context) {
+        var _ = CSSAssist = function (selector) {
                 return new _.fn.init(selector);
         };
 
@@ -364,4 +364,4 @@
         // Give the init method the CSSAssist prototype for later instantiation
         _.fn.init.prototype = _.fn;
 
-})() // end self-invoking function
+})(); // end self-invoking function
