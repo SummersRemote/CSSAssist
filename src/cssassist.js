@@ -73,7 +73,7 @@ var CSSAssist = (function () {
                 },
 
                 // simple forEach loop (faster than native forEach for most cases)
-                forEach: function (func, context) {
+                forEach: function (func) {
                         for (var i = 0; i < this.length; ++i) {
                                 func.call(this, this[i]);
                         }
@@ -212,7 +212,7 @@ var CSSAssist = (function () {
 
                 // unique function (returns an array not a CSSAssist object)
                 unique:  function () {
-                        var context = (context) ? CSSAssist(context) : this,
+                        var context = this,
                             unique = [];
                         for (var i = 0; i < context.length; i += 1) {
                                 if (unique.indexOf(context[i]) < 0) {
@@ -327,7 +327,7 @@ var CSSAssist = (function () {
                 if (!values) return []
                 if (values instanceof Array) return values
                 else if (typeof values === 'string') return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
-                else return this;
+                else return [];
         };
 
         /**
