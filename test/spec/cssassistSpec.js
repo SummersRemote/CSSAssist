@@ -193,7 +193,7 @@ describe("CSSAssist setAttr", function() {
 describe("CSSAssist unique", function() {
 
     it("returns a unique set", function() {
-    	obj = CSSAssist('#cssassist > p').unique(CSSAssist('.cssassist > p'));
+    	obj = CSSAssist('#cssassist > p').unique();
     	expect(obj.length).toBe(4);
     });
 
@@ -202,7 +202,7 @@ describe("CSSAssist unique", function() {
 describe("CSSAssist union", function() {
 
     it("returns the union set of unique items (concat)", function() {
-    	obj = CSSAssist('#cssassist p:nth-child(odd)').union(CSSAssist('.cssassist > p:nth-child(even)'));
+    	obj = CSSAssist('#cssassist > p:nth-child(odd)').union(CSSAssist('#cssassist > p:nth-child(even)'));
     	expect(obj.length).toBe(4);
     });
 
@@ -211,7 +211,7 @@ describe("CSSAssist union", function() {
 describe("CSSAssist intersects", function() {
 
     it("returns the intersecting set of unique items", function() {
-    	obj = CSSAssist('#cssassist > p').intersects(CSSAssist('.cssassist > p:nth-child(odd)'));
+    	obj = CSSAssist('#cssassist > p').intersects(CSSAssist('#cssassist > p:nth-child(odd)'));
     	expect(obj.length).toBe(2);
     });
 
@@ -220,7 +220,7 @@ describe("CSSAssist intersects", function() {
 describe("CSSAssist difference", function() {
 
     it("returns the difference set of unique items", function() {
-    	obj = CSSAssist('#cssassist > p').difference(CSSAssist('.cssassist > p:nth-child(odd)'));
+    	obj = CSSAssist('#cssassist > p').difference(CSSAssist('#cssassist > p:nth-child(odd)'));
     	expect(obj.length).toBe(2);
     });
 
