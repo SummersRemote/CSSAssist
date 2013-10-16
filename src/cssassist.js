@@ -34,27 +34,21 @@
  */
 
 // create a self-invoking function
-(function () {
-
+var CSSAssist = (function () {
+    
         // this is the main object
-        // internally assigned to _ to enhance compressor performance
-        var _ = CSSAssist = function (selector) {
-                return new _.fn.init(selector);
+        // internally assigned to CSSAssist to enhance compressor performance
+        var CSSAssist = function (selector) {
+                return new CSSAssist.prototype.init(selector);
         };
-
-        // _ version number
-        _.version = '2.0.0-alpha';
+                
+        CSSAssist.version= '2.0.0-alpha2';
 
         // define the CSSAssist prototype
-        _.fn = _.prototype = {
+        CSSAssist.fn = CSSAssist.prototype = {
 
-                /**
-                 * CSSAssist
-                 *
-                 */
                 init: function (selector) {
                         var context = [];
-                        // if no selector, pass 
                         if (!selector) context = [];
                         // got self
                         else if (selector instanceof CSSAssist) return selector;
@@ -69,9 +63,12 @@
                                 }
                         }
 
-                        // set the prototype for the context tp CSSAssist and return
-                        context.__proto__ = _.fn;
-                        return context;
+                        // build this object
+                        // copy over the context array
+                        for (var i=0; i< context.length; ++i) this[i] = context[i];
+                        // set this length
+                        this.length = context.length;
+                        return this;
 
                 },
 
@@ -91,8 +88,8 @@
                  */
                 hasClass: function (values, context) {
                         if (!values) values =' ';
-                        var context = (context) ? _(context) : this,
-                                values = _.makeArray(values);
+                        var context = (context) ? CSSAssist(context) : this,
+                                values = CSSAssist.makeArray(values);
                         for (var i = 0; i < context.length; ++i) {
                                 var className = (' ' + context[i].className + ' ').replace(rSpace, ' ');
                                 for (var j = 0; j < values.length; ++j) {
@@ -110,8 +107,8 @@
                  */
                 addClass: function (values, context) {
                         if (values) {
-                                var context = (context) ? _(context) : this,
-                                        values = _.makeArray(values);
+                                var context = (context) ? CSSAssist(context) : this,
+                                        values = CSSAssist.makeArray(values);
                                 context.forEach(
                                         function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
@@ -129,8 +126,8 @@
                  * e.g. CSSAssist('div').removeClass('myAwesomeStyle');
                  */
                 removeClass: function (values, context) {
-                        var context = (context) ? _(context) : this;
-                        if (values) values = _.makeArray(values);
+                        var context = (context) ? CSSAssist(context) : this;
+                        if (values) values = CSSAssist.makeArray(values);
                         context.forEach(
                                 function (item) {
                                         if (values) {
@@ -157,8 +154,8 @@
                  */
                 toggleClass: function (values, context) {
                         if (values) {
-                                var context = (context) ? _(context) : this,
-                                    values = _.makeArray(values);
+                                var context = (context) ? CSSAssist(context) : this,
+                                    values = CSSAssist.makeArray(values);
                                 context.forEach(
                                         function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
@@ -179,7 +176,7 @@
                  */
                 setStyle: function (property, value, context) {
                         if (property) {
-                                var context = (context) ? _(context) : this;
+                                var context = (context) ? CSSAssist(context) : this;
                                 context.forEach(
                                         function (item) {
                                                 if (value) item.style[property] = value;
@@ -198,7 +195,7 @@
                  */
                 setAttr: function (attr, value, context) {
                         if (attr) {
-                                var context = (context) ? _(context) : this;
+                                var context = (context) ? CSSAssist(context) : this;
                                 context.forEach(
                                         function (item) {
                                                 if (value) item.setAttribute(attr, value);
@@ -214,28 +211,36 @@
                  */
 
                 // unique function (returns an array not a CSSAssist object)
-                unique:  function (context) {
-                        var context = (context) ? _(context) : this;
-                        var unique = [];
+                unique:  function () {
+                        var context = (context) ? CSSAssist(context) : this,
+                            unique = [];
                         for (var i = 0; i < context.length; i += 1) {
                                 if (unique.indexOf(context[i]) < 0) {
                                         unique.push(context[i]);
                                 }
                         }
-                        return _(unique);
+                        return CSSAssist(unique);
                 },
 
-                // union (concat)
+                // union (brute force concat)
                 union: function (arrayObj, context) {
-                        var context = (context) ? _(context) : this;
+                        var context = (context) ? CSSAssist(context) : this;
                         if (arrayObj) {
-                                return _([].concat.call(context, arrayObj)).unique();
+                            var ret = [];
+                            for (var i=0; i < context.length; ++i) {
+                                ret.push(context[i]);
+                            }
+                            for (var i=0; i < arrayObj.length; ++i) {
+                                ret.push(arrayObj[i]);
+                            }
+                            return CSSAssist(ret).unique();
                         }
+                        return this;
                 },
 
                 // intersection (brute force)
                 intersects: function (arrayObj, context) {
-                        var context = (context) ? _(context) : this;
+                        var context = (context) ? CSSAssist(context) : this;
                         if (arrayObj) {
                                 var ret = [];
                                 context.forEach(
@@ -248,26 +253,25 @@
                                                 }
                                         }
                                 );
-                                return _(ret).unique();
+                                return CSSAssist(ret).unique();
                         }
                         return this;
                 },
 
                 // difference
                 difference: function (arrayObj, context) {
-                        var context = (context) ? _(context) : this;   
+                        var context = (context) ? CSSAssist(context) : this;   
                         if (arrayObj) {
                                 var ret = []
                                 var all = context.union(arrayObj);
                                 all.forEach(
                                     function (item) {
-                                        //var item = all[i];
                                         if (([].indexOf.call(context, item) > -1) != ([].indexOf.call(arrayObj, item) > -1)) {
                                                 ret.push(item)
                                         }
                                     }
                                 ); 
-                                return _(ret);
+                                return CSSAssist(ret);
                         }
                         return this;
                 },
@@ -301,7 +305,7 @@
                         }
                         return this;
                 }
-
+ 
         };  // end prototype
 
         // regex for collapsing space, tabs, returns, and newlines to single space
@@ -319,7 +323,7 @@
          * if values is a string clean and split it
          * oterwise, return this
          */
-        _.makeArray = function (values) {
+        CSSAssist.makeArray = function (values) {
                 if (!values) return []
                 if (values instanceof Array) return values
                 else if (typeof values === 'string') return values.replace(/^\s+|\s+$/g, '').split(/\s+/);
@@ -330,7 +334,7 @@
          * Load an external CSS file
          * e.g. CSSAssist.loadCSSLink('http://meyerweb.com/eric/tools/css/reset/reset.css');
          */
-        _.loadCSS = function (url) {
+        CSSAssist.loadCSS = function (url) {
                 if (url) {
                         var head = document.getElementsByTagName('head')[0],
                                 link = document.createElement('link');
@@ -349,7 +353,7 @@
          * styles is a string containing css rules to be injected
          * e.g CSSAssist.loadCSS( 'body { background-color: red;} div { background-color: yellow;}' );
          */
-        _.createCSS = function (styles) {
+        CSSAssist.createCSS = function (styles) {
                 if (styles) {
                         var head = document.getElementsByTagName('head')[0],
                                 styleNode = document.createElement('style');
@@ -362,6 +366,7 @@
         }     
 
         // Give the init method the CSSAssist prototype for later instantiation
-        _.fn.init.prototype = _.fn;
+        CSSAssist.fn.init.prototype = CSSAssist.fn;
+        return CSSAssist;
 
 })(); // end self-invoking function
