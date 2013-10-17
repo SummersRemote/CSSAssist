@@ -58,12 +58,12 @@
 
 		// displayBtn, assign button handlers
 		$css('#displayBtn').addListener( 'click', function(event) {
-			// switch button text
-			if ($css('div.example').hasClass('inline')) this.innerHTML='Switch to Block'
-			else this.innerHTML = 'Switch to Inline'
-			
 			// toggle the classes
 			$css('div.example').toggleClass('inline');
+			
+			// switch button text
+			if ($css('div.example').hasClass('inline')) this.innerHTML='Switch to Block'
+			else this.innerHTML = 'Switch to Inline'			
 		});
 		
 		// eg 1, assign button handlers
