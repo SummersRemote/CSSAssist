@@ -190,14 +190,61 @@ describe("CSSAssist setAttr", function() {
 
 });
 
-describe("CSSAssist unique", function() {
+// // require jquery setup
+// describe("CSSAssist addListener", function() {
 
-    it("returns a unique set", function() {
-    	obj = CSSAssist('#cssassist > p').unique();
-    	expect(obj.length).toBe(4);
-    });
+// 	beforeEach(function () {
+// 		fixture.className = 'cssassist';
+// 		fixture.removeAttribute('style');
+// 	});
 
-});
+//     it("adds an event listener to a DOM node", function() {
+//     	obj = CSSAssist('#cssassist').addListener( "click",
+//     		function(item) {
+//     			CSSAssist('#cssassist').addClass('foo');
+//     		}
+//     	);
+//     	expect(obj[0].className).not.toMatch(/foo/);
+//     	$('#cssassist').trigger('click');
+//     	expect(obj[0].className).toMatch(/foo/);
+//     });
+
+// });
+
+
+// // require jquery setup
+// describe("CSSAssist removeListener", function() {
+
+// 	beforeEach(function () {
+// 		fixture.className = 'cssassist';
+// 		fixture.removeAttribute('style');
+// 	});
+
+//     it("adds an event listener to a DOM node", function() {
+//     	obj = CSSAssist('#cssassist').addListener( "click",
+//     		function(item) {
+//     			CSSAssist('#cssassist').addClass('foo');
+//     		}
+//     	);
+//     	expect(obj[0].className).not.toMatch(/foo/);
+//     	$('#cssassist').trigger('click');
+//     	expect(obj[0].className).toMatch(/foo/);
+
+//     	//reset
+// 		fixture.className = 'cssassist';	
+// 		obj = CSSAssist('#cssassist').removeListener( "click",
+//     		function(item) {
+//     			CSSAssist('#cssassist').addClass('foo');
+//     		}
+//     	);
+//     	expect(obj[0].className).not.toMatch(/foo/);
+//     	$('#cssassist').trigger('click');
+//     	expect(obj[0].className).not.toMatch(/foo/);
+
+//     });
+
+// });
+
 
 describe("CSSAssist union", function() {
 
