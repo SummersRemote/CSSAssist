@@ -10,6 +10,8 @@
 <style>
 	.example {
 		vertical-align:top;
+		margin: 10px;
+		padding: 5px;
 	}
 	
 	.upsideDown {
@@ -22,13 +24,25 @@
 		display: inline-block;
 	}
 
+	.box {
+		border-style:solid;
+		border-width:1px;
+		box-shadow: 5px 5px 10px #888888;
+
+	}
+
 </style>
 </head>
 <body>
 <h1>CSSAssist Examples (click me)</h1>
 
-<button id="displayBtn">Switch to Inline</button>
-<br />
+<div id="controls" class="controls">
+	<button id="displayBtn">Switch to Inline</button>
+	<button id="boxesBtn">Add Shadows</button>
+	<br />
+	<input type='text' placeholder='Match text' id='matchText' size='15'><input type='text'placeholder='Replace with'id='replaceText' size='15'>
+	<button id='replaceBtn'>Replace Text</button>
+</div>
 
 <div id="eg01" class="example" style='width: 30%'>
 	<button>Flip me.</button>
@@ -46,7 +60,11 @@
 	</p>
 </div>
 
+
+<!-- load cssassist -->
 <script src="../src/cssassist.js"></script>
+<!-- load a plugin -->
+<script src="../plugins/rHTML.js"></script>
 <script type="text/javascript">
 
 		// header handler
@@ -75,6 +93,25 @@
 			if ($css('div.example').hasClass('inline')) this.innerHTML='Switch to Block'
 			else this.innerHTML = 'Switch to Inline'			
 		});
+
+		// boxesBtn, assign button handlers
+		$css('#boxesBtn').addListener( 'click', function(event) {
+			// toggle the classes
+			$css('div.example').toggleClass('box');
+			
+			// switch button text
+			if ($css('div.example').hasClass('box')) this.innerHTML='Hide Shadows'
+			else this.innerHTML = 'Show Shadows'			
+		});
+
+		// replaceBtn, assign button handlers
+		$css('#replaceBtn').addListener( 'click', function(event) {
+			var matchText = document.getElementById("matchText").value;
+			var replaceText = document.getElementById("replaceText").value;
+			var pattern = new RegExp(matchText,'g');
+			$css('div.example > p').rHTML(pattern, replaceText);
+			
+		});		
 		
 		// eg 1, assign button handlers
 		$css('#eg01 button').addListener( 'click', function(event) {
@@ -95,7 +132,6 @@
 			scale = 1;
 			$css('#eg02 > p').setStyle('fontSize', scale + 'em');
 		});
-
 
 </script>
 </body>
