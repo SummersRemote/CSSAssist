@@ -13,20 +13,26 @@
 		-ms-transform: rotate(180deg); /* IE 9 */
 		-webkit-transform: rotate(180deg); /* Safari and Chrome */
 	}
+	
+	.inline {
+		display: inline;
+	}
 
 </style>
 </head>
 <body>
 <h1>CSSAssist Examples (click me)</h1>
 
-<div id="eg01" style='width: 500px'>
+<button id="displayBtn">Toggle Display Style</button><br />
+
+<div id="eg01" class="example" style='width: 50%'>
 	<button>Flip me.</button>
 	<p>
 	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fringilla turpis eget varius consectetur. Etiam rutrum scelerisque libero sed adipiscing. Suspendisse pharetra lobortis ante, et dignissim mi vehicula laoreet. Maecenas scelerisque, sem at viverra molestie, tellus neque porttitor diam, id malesuada orci tortor eu odio. Etiam sagittis aliquet odio ut rutrum. Cras eget turpis eget turpis porttitor porttitor. Aliquam justo ante, ultricies vitae libero imperdiet, bibendum aliquet sem. Donec sed mi et dui porta pulvinar a in leo. Donec ut sagittis libero. Aliquam ultrices est massa. Duis in lorem ac velit tempor eleifend sed vitae lectus. Donec sollicitudin libero in urna viverra tempus.
 	</p>
 </div>
 
-<div id="eg02" style='width: 500px'>
+<div id="eg02" class="example" style='width: 50%'>
 	<button id='bigger'>Bigger</button>
 	<button id='smaller'>Smaller</button>
 	<button id='reset'>Reset</button>
@@ -45,7 +51,11 @@
 	 		$css('h1').setStyle('color', color);
 	 	});
 
-
+		// displayBtn, assign button handlers
+		$css('#displayBtn').addListener( 'click', function(event) {
+			$css('div.example').toggleClass('upsideDown');
+		});
+		
 		// eg 1, assign button handlers
 		$css('#eg01 button').addListener( 'click', function(event) {
 			$css('#eg01 > p').toggleClass('upsideDown');
