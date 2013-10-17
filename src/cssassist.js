@@ -275,7 +275,9 @@ var CSSAssist = (function () {
                                 var capture = useCapture || false;
                                 this.forEach(
                                         function (item) {
-                                                item.addEventListener(type, listener, capture);
+                                                if (item.addEventListener) item.addEventListener(type, listener, capture);
+                                                else if (item.attachEvent) item.attachEvent( "on" + type, listener );
+                                                else return false;
                                         }
                                 );
                         }
@@ -290,7 +292,9 @@ var CSSAssist = (function () {
                                 var capture = useCapture || false;
                                 this.forEach(
                                         function (item) {
-                                                item.removeEventListener(type, listener, capture);
+                                                if (item.addEventListener) item.removeEventListener(type, listener, capture);
+                                                else if (item.attachEvent) item.detachEvent( "on" + type, listener );
+                                                else return false;
                                         }
                                 );
                         }
