@@ -57,6 +57,7 @@
 
 		// displayBtn, assign button handlers
 		$css('#displayBtn').addListener( 'click', function(event) {
+			this.innerHTML = 'foo';
 			$css('div.example').toggleClass('inline');
 		});
 		
