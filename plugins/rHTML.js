@@ -10,7 +10,7 @@
 
 // self invoking function wrapper
 (function () {
-	// place the new function, rHTML, in the CSSAssist prototype
+	// place the new function, rHTML, in the CSSAssist namespace
 	// and specify the parameters it should expect
 	CSSAssist.fn.rHTML = function(regex, value) {
 		// iterate over each item in the context using the
@@ -25,5 +25,5 @@
 	    // return 'this' to keep the function chainable
 	    return this;
 	};
-// close the self invoking function
-})(CSSAssist); 
+
+})(); // close the self invoking function
