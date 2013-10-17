@@ -40,7 +40,7 @@ var CSSAssist = (function () {
                 return new CSSAssist.prototype.init(selector);
         };
 
-        CSSAssist.version = '2.0.0-alpha2';
+        CSSAssist.version = '2.0.0-beta';
 
         // define the CSSAssist prototype
         CSSAssist.fn = CSSAssist.prototype = {
