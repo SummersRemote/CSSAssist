@@ -57,7 +57,7 @@ var CSSAssist = (function () {
                                 else if (selector.nodeType) context = [selector];
                                 // if its a string (CSS selector)
                                 else if (typeof selector === 'string') {
-                                        context = [].slice.call(document.querySelectorAll(selector));
+                                        context = [].slice.call(document.querySelectorAll(selector),0);
                                 } else {
                                         context = [];
                                 }
