@@ -49,7 +49,17 @@
 <script src="../src/cssassist.js"></script>
 <script type="text/javascript">
 
+		// header handler
+	 	CSSAssist(document).addListener( 'DOMContentLoaded', function(event) {
+	 		// you could wrap everything in here to ensure the DOM is ready
+	 		// does not work for IE 8
+	 		alert('DOMContentLoaded Event has fired.  You are using CSSAssist version ' + CSSAssist.version)
+	 	});		
+		
+		
+		// setting a shortcut
 		$css = CSSAssist;
+		
 		// header handler
 	 	$css('h1').addListener( 'click', function(event) {
 	 		var color = '#'+Math.floor(Math.random()*16777215).toString(16);
