@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /**
  * @author William Summers
  *
@@ -32,17 +31,16 @@
  * non-chainable methods
  *      makeArray, loadCSS, createCSS
  */
-
 // create a self-invoking function
 var CSSAssist = (function () {
-    
+
         // this is the main object
         // internally assigned to CSSAssist to enhance compressor performance
         var CSSAssist = function (selector) {
                 return new CSSAssist.prototype.init(selector);
         };
-                
-        CSSAssist.version= '2.0.0-alpha2';
+
+        CSSAssist.version = '2.0.0-alpha2';
 
         // define the CSSAssist prototype
         CSSAssist.fn = CSSAssist.prototype = {
@@ -56,16 +54,18 @@ var CSSAssist = (function () {
                                 // if an array
                                 if (selector instanceof Array) context = selector;
                                 // wrap dom nodes.
-                                else if (typeof selector === 'object') context = [selector];
+                                else if (selector.nodeType) context = [selector];
                                 // if its a string (CSS selector)
                                 else if (typeof selector === 'string') {
                                         context = [].slice.call(document.querySelectorAll(selector));
+                                } else {
+                                        context = [];
                                 }
                         }
 
                         // build this object
                         // copy over the context array
-                        for (var i=0; i< context.length; ++i) this[i] = context[i];
+                        for (var i = 0; i < context.length; ++i) this[i] = context[i];
                         // set this length
                         this.length = context.length;
                         return this;
@@ -86,12 +86,11 @@ var CSSAssist = (function () {
                  * values may be either a space delimited string or an array
                  * e.g. CSSAssist('div').hasClass('myAwesomeStyle');
                  */
-                hasClass: function (values, context) {
-                        if (!values) values =' ';
-                        var context = (context) ? CSSAssist(context) : this,
-                                values = CSSAssist.makeArray(values);
-                        for (var i = 0; i < context.length; ++i) {
-                                var className = (' ' + context[i].className + ' ').replace(rSpace, ' ');
+                hasClass: function (values) {
+                        if (!values) values = ' ';
+                        var values = CSSAssist.makeArray(values);
+                        for (var i = 0; i < this.length; ++i) {
+                                var className = (' ' + this[i].className + ' ').replace(rSpace, ' ');
                                 for (var j = 0; j < values.length; ++j) {
                                         if ((className.indexOf(' ' + values[j] + ' ') < 0)) return false;
                                 }
@@ -105,14 +104,13 @@ var CSSAssist = (function () {
                  * values may be either a space delimited string or an array
                  * e.g. CSSAssist('div').addClass('myAwesomeStyle');
                  */
-                addClass: function (values, context) {
+                addClass: function (values) {
                         if (values) {
-                                var context = (context) ? CSSAssist(context) : this,
-                                        values = CSSAssist.makeArray(values);
-                                context.forEach(
+                                var values = CSSAssist.makeArray(values);
+                                this.forEach(
                                         function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
-                                                        if (!context.hasClass(values[j], item)) item.className += ' ' + values[j];
+                                                        if (!CSSAssist(item).hasClass(values[j])) item.className += ' ' + values[j];
                                                 }
                                         }
                                 );
@@ -125,10 +123,9 @@ var CSSAssist = (function () {
                  * values may be either a space delimited string or an array
                  * e.g. CSSAssist('div').removeClass('myAwesomeStyle');
                  */
-                removeClass: function (values, context) {
-                        var context = (context) ? CSSAssist(context) : this;
+                removeClass: function (values) {
                         if (values) values = CSSAssist.makeArray(values);
-                        context.forEach(
+                        this.forEach(
                                 function (item) {
                                         if (values) {
                                                 var className = (' ' + item.className + ' ').replace(rSpace, ' ');
@@ -152,15 +149,15 @@ var CSSAssist = (function () {
                  * values may be either a space delimited string or an array
                  * e.g. CSSAssist('div').toggleClass('myAwesomeStyle');
                  */
-                toggleClass: function (values, context) {
+                toggleClass: function (values) {
                         if (values) {
-                                var context = (context) ? CSSAssist(context) : this,
-                                    values = CSSAssist.makeArray(values);
-                                context.forEach(
+                                var values = CSSAssist.makeArray(values);
+                                this.forEach(
                                         function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
-                                                        if (context.hasClass(values[j], item)) context.removeClass(values[j], item)
-                                                        else context.addClass(values[j], item);
+                                                        var it = CSSAssist(item);
+                                                        if (it.hasClass(values[j])) it.removeClass(values[j])
+                                                        else it.addClass(values[j]);
                                                 }
                                         }
                                 );
@@ -174,10 +171,9 @@ var CSSAssist = (function () {
                  * e.g. CSSAssist('.red').setStyle('color', '#FF0000'); // sets the style
                  * e.g. CSSAssist('.red').setStyle('color', ); // clears the style
                  */
-                setStyle: function (property, value, context) {
+                setStyle: function (property, value) {
                         if (property) {
-                                var context = (context) ? CSSAssist(context) : this;
-                                context.forEach(
+                                this.forEach(
                                         function (item) {
                                                 if (value) item.style[property] = value;
                                                 else item.style[property] = '';
@@ -193,10 +189,9 @@ var CSSAssist = (function () {
                  * e.g. CSSAssist('span').setAttr('data-src', 'my data source'); // sets the style
                  * e.g. CSSAssist('span').setAttr('data-src', ); // clears the style
                  */
-                setAttr: function (attr, value, context) {
+                setAttr: function (attr, value) {
                         if (attr) {
-                                var context = (context) ? CSSAssist(context) : this;
-                                context.forEach(
+                                this.forEach(
                                         function (item) {
                                                 if (value) item.setAttribute(attr, value);
                                                 else item.removeAttribute(attr);
@@ -211,39 +206,36 @@ var CSSAssist = (function () {
                  */
 
                 // unique function (returns an array not a CSSAssist object)
-                unique:  function () {
-                        var context = this,
-                            unique = [];
-                        for (var i = 0; i < context.length; i += 1) {
-                                if (unique.indexOf(context[i]) < 0) {
-                                        unique.push(context[i]);
+                unique: function () {
+                        var unique = [];
+                        for (var i = 0; i < this.length; i += 1) {
+                                if (unique.indexOf(this[i]) < 0) {
+                                        unique.push(this[i]);
                                 }
                         }
                         return CSSAssist(unique);
                 },
 
                 // union (brute force concat)
-                union: function (arrayObj, context) {
-                        var context = (context) ? CSSAssist(context) : this;
+                union: function (arrayObj) {
                         if (arrayObj) {
-                            var ret = [];
-                            for (var i=0; i < context.length; ++i) {
-                                ret.push(context[i]);
-                            }
-                            for (var i=0; i < arrayObj.length; ++i) {
-                                ret.push(arrayObj[i]);
-                            }
-                            return CSSAssist(ret).unique();
+                                var ret = [];
+                                for (var i = 0; i < this.length; ++i) {
+                                        ret.push(this[i]);
+                                }
+                                for (var i = 0; i < arrayObj.length; ++i) {
+                                        ret.push(arrayObj[i]);
+                                }
+                                return CSSAssist(ret).unique();
                         }
                         return this;
                 },
 
                 // intersection (brute force)
-                intersects: function (arrayObj, context) {
-                        var context = (context) ? CSSAssist(context) : this;
+                intersects: function (arrayObj) {
                         if (arrayObj) {
                                 var ret = [];
-                                context.forEach(
+                                this.forEach(
                                         function (item) {
                                                 for (var i = 0; i < arrayObj.length; ++i) {
                                                         if (item == arrayObj[i]) {
@@ -259,18 +251,17 @@ var CSSAssist = (function () {
                 },
 
                 // difference
-                difference: function (arrayObj, context) {
-                        var context = (context) ? CSSAssist(context) : this;   
+                difference: function (arrayObj) {
                         if (arrayObj) {
-                                var ret = []
-                                var all = context.union(arrayObj);
+                                var ret = [],
+                                        all = this.union(arrayObj);
                                 all.forEach(
-                                    function (item) {
-                                        if (([].indexOf.call(context, item) > -1) != ([].indexOf.call(arrayObj, item) > -1)) {
-                                                ret.push(item)
+                                        function (item) {
+                                                if (([].indexOf.call(this, item) > -1) != ([].indexOf.call(arrayObj, item) > -1)) {
+                                                        ret.push(item)
+                                                }
                                         }
-                                    }
-                                ); 
+                                );
                                 return CSSAssist(ret);
                         }
                         return this;
@@ -305,8 +296,8 @@ var CSSAssist = (function () {
                         }
                         return this;
                 }
- 
-        };  // end prototype
+
+        }; // end prototype
 
         // regex for collapsing space, tabs, returns, and newlines to single space
         var rSpace = /[\s+\t\r\n\f]/g;
@@ -363,7 +354,7 @@ var CSSAssist = (function () {
                         head.appendChild(styleNode);
                 }
                 return this;
-        }     
+        }
 
         // Give the init method the CSSAssist prototype for later instantiation
         CSSAssist.fn.init.prototype = CSSAssist.fn;
