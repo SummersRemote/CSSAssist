@@ -75,7 +75,7 @@ var CSSAssist = (function () {
                 // simple forEach loop (faster than native forEach for most cases)
                 forEach: function (func) {
                         for (var i = 0; i < this.length; ++i) {
-                                func.call(this, this[i]);
+                                func.call(this, this[i], i);
                         }
                         return this;
                 },
