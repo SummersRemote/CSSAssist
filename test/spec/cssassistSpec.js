@@ -190,13 +190,17 @@ describe("CSSAssist setAttr", function() {
 
 });
 
-// // require jquery setup
-// describe("CSSAssist addListener", function() {
+// requires jquery setup
+describe("CSSAssist addListener", function() {
+    
+    it("no test available (requires jQuery setup)", function() {
+    	expect(true).toBe(true);
+    });
 
-// 	beforeEach(function () {
-// 		fixture.className = 'cssassist';
-// 		fixture.removeAttribute('style');
-// 	});
+	// beforeEach(function () {
+	// 	fixture.className = 'cssassist';
+	// 	fixture.removeAttribute('style');
+	// });
 
 //     it("adds an event listener to a DOM node", function() {
 //     	obj = CSSAssist('#cssassist').addListener( "click",
@@ -209,11 +213,15 @@ describe("CSSAssist setAttr", function() {
 //     	expect(obj[0].className).toMatch(/foo/);
 //     });
 
-// });
+});
 
 
-// // require jquery setup
-// describe("CSSAssist removeListener", function() {
+// require jquery setup
+describe("CSSAssist removeListener", function() {
+   
+    it("no test available (requires jQuery setup)", function() {
+    	expect(true).toBe(true);
+    });
 
 // 	beforeEach(function () {
 // 		fixture.className = 'cssassist';
@@ -243,51 +251,85 @@ describe("CSSAssist setAttr", function() {
 
 //     });
 
-// });
+});
 
 
 describe("CSSAssist union", function() {
 
-    it("returns the union set of unique items (concat)", function() {
+    it("returns the unique set of members from 'A union B' (concat)", function() {
     	obj = CSSAssist('#cssassist > p:nth-child(odd)').union(CSSAssist('#cssassist > p:nth-child(even)'));
+    	obj.addClass('union');
     	expect(obj.length).toBe(4);
+    	expect(obj.hasClass('union')).toBe(true);
     });
 
 });
 
 describe("CSSAssist intersects", function() {
 
-    it("returns the intersecting set of unique items", function() {
+    it("returns the unique set of members from 'A intersecting B'", function() {
     	obj = CSSAssist('#cssassist > p').intersects(CSSAssist('#cssassist > p:nth-child(odd)'));
+    	obj.addClass('intersects');
     	expect(obj.length).toBe(2);
+    	expect(obj.hasClass('intersects')).toBe(true);
+    	expect(CSSAssist('#cssassist > p:nth-child(even)').hasClass('intersects')).toBe
+    	(false);
     });
 
 });
 
 describe("CSSAssist difference", function() {
 
-    it("returns the difference set of unique items", function() {
+    it("returns the unique set of members from 'A difference B'", function() {
     	obj = CSSAssist('#cssassist > p').difference(CSSAssist('#cssassist > p:nth-child(odd)'));
+    	obj.addClass('difference');
     	expect(obj.length).toBe(2);
+    	expect(obj.hasClass('difference')).toBe(true);
+    	expect(CSSAssist('#cssassist > p:nth-child(even)').hasClass('difference')).toBe
+    	(true);
+    	CSSAssist('#cssassist > p').removeClass();
     });
 
 });
 
 describe("CSSAssist loadCSS", function() {
-
-    it("no test available", function() {
+	
+	it("no test available (problems in test)", function() {
     	expect(true).toBe(true);
     });
+	// beforeEach(function () {
+	// 	fixture.className = 'cssassist';
+	// 	fixture.removeAttribute('style');
+	// });
+
+ //    it("loads an external CSS file", function() {
+
+	//     waitsFor(function() {
+	//       		return CSSAssist.loadCSS('assets/test.css');
+	//     	}, "external CSS failed to load", 5000
+	//     );
+    	
+ //    	runs(function () {
+	//     	obj = CSSAssist('#cssassist')[0];
+	//     	tmp = document.defaultView.getComputedStyle(obj,null).getPropertyValue('display');
+	//     	expect(tmp).toMatch('inline');
+	//     });
+ //    });
 
 });
 
 describe("CSSAssist createCSS", function() {
+	
+	beforeEach(function () {
+		fixture.className = 'cssassist';
+		fixture.removeAttribute('style');
+	});
 
     it("loaded programmatically created CSS styles", function() {
     	CSSAssist.createCSS( 'div.cssassist { display: none;}' );
-    	tmp = CSSAssist('#cssassist')[0];
-    	obj = window.getComputedStyle(tmp, null).getPropertyValue('display');
-    	expect(obj).toMatch('none');
+    	obj = CSSAssist('#cssassist')[0];
+    	tmp = window.getComputedStyle(obj, null).getPropertyValue('display');
+    	expect(tmp).toMatch('none');
     });
 
 });
