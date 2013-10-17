@@ -1,0 +1,72 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>CSSAssist Examples</title>
+
+<script type="text/javascript" src="https://rawgithub.com/plusdude/array-generics/master/array.generics.js"></script>
+<style>
+	.upsideDown {
+		transform: rotate(180deg);
+		-ms-transform: rotate(180deg); /* IE 9 */
+		-webkit-transform: rotate(180deg); /* Safari and Chrome */
+	}
+
+</style>
+</head>
+<body>
+<h1>CSSAssist Examples (click me)</h1>
+
+<div id="eg01" style='width: 500px'>
+	<button>Flip me.</button>
+	<p>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fringilla turpis eget varius consectetur. Etiam rutrum scelerisque libero sed adipiscing. Suspendisse pharetra lobortis ante, et dignissim mi vehicula laoreet. Maecenas scelerisque, sem at viverra molestie, tellus neque porttitor diam, id malesuada orci tortor eu odio. Etiam sagittis aliquet odio ut rutrum. Cras eget turpis eget turpis porttitor porttitor. Aliquam justo ante, ultricies vitae libero imperdiet, bibendum aliquet sem. Donec sed mi et dui porta pulvinar a in leo. Donec ut sagittis libero. Aliquam ultrices est massa. Duis in lorem ac velit tempor eleifend sed vitae lectus. Donec sollicitudin libero in urna viverra tempus.
+	</p>
+</div>
+
+<div id="eg02" style='width: 500px'>
+	<button id='bigger'>Bigger</button>
+	<button id='smaller'>Smaller</button>
+	<button id='reset'>Reset</button>
+	<p>
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam fringilla turpis eget varius consectetur. Etiam rutrum scelerisque libero sed adipiscing. Suspendisse pharetra lobortis ante, et dignissim mi vehicula laoreet. Maecenas scelerisque, sem at viverra molestie, tellus neque porttitor diam, id malesuada orci tortor eu odio. Etiam sagittis aliquet odio ut rutrum. Cras eget turpis eget turpis porttitor porttitor. Aliquam justo ante, ultricies vitae libero imperdiet, bibendum aliquet sem. Donec sed mi et dui porta pulvinar a in leo. Donec ut sagittis libero. Aliquam ultrices est massa. Duis in lorem ac velit tempor eleifend sed vitae lectus. Donec sollicitudin libero in urna viverra tempus.
+	</p>
+</div>
+
+<script src="../src/cssassist.js"></script>
+<script type="text/javascript">
+
+		$css = CSSAssist;
+		// header handler
+	 	$css('h1').addListener( 'click', function(event) {
+	 		var color = '#'+Math.floor(Math.random()*16777215).toString(16);
+	 		$css('h1').setStyle('color', color);
+	 	});
+
+
+		// eg 1, assign button handlers
+		$css('#eg01 button').addListener( 'click', function(event) {
+			$css('#eg01 > p').toggleClass('upsideDown');
+		});
+
+		// eg 2 assign button handlers
+		var scale = 1;
+		$css('#eg02 #bigger').addListener( 'click', function(event) {
+			scale = scale*1.25;
+			$css('#eg02 > p').setStyle('fontSize', scale + 'em');
+		});
+		$css('#eg02 #smaller').addListener( 'click', function(event) {
+			scale = scale/1.25;
+			$css('#eg02 > p').setStyle('fontSize', scale + 'em');
+		});
+		$css('#eg02 #reset').addListener( 'click', function(event) {
+			scale = 1;
+			$css('#eg02 > p').setStyle('fontSize', scale + 'em');
+		});
+
+
+</script>
+</body>
+</html>
