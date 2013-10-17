@@ -1,8 +1,11 @@
 /**
  * This is an example plugin for CSSAssist.
+ *
  * This plugin accepts a regular expression and a replacement string
  * and executes the expression against the innerHTML of each item
  * in the current context.
+ *
+ * Note:  tags may be included in the string to match, so be mindful
  */
 
 // self invoking function wrapper
