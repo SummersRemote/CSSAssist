@@ -63,18 +63,19 @@
 </div>
 
 <div id="eg03" class="example">
-rHTML plugin operating on a list
+replace plugin operating on a list
 	<ul>
 		<li>item 1 has <b>some bold text</b> in it</li>
-		<li>item 2 <span>has a nested item in it</span></li>
+		<li>item 2 <span>has a nested item</span></li>
 		<li><span>item 3</span> has a trailing item</li>
+		<li>item 4 <span>has some text in the middle</span> of it's item</li>
 	</ul>
 </div>
 
 <!-- load cssassist -->
 <script src="../src/cssassist.js"></script>
 <!-- load a plugin -->
-<script src="../plugins/rHTML.js"></script>
+<script src="../plugins/cssassist.replace.js"></script>
 <script type="text/javascript">
 
 		// header handler
@@ -146,7 +147,7 @@ rHTML plugin operating on a list
 
 		// plugin example
 		pattern = /item/g;
-		$css('#eg03 li').rHTML(pattern, "thing", false);
+		$css('#eg03 li').replace(pattern, "thing");
 		
 
 </script>

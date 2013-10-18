@@ -8,9 +8,9 @@
  */
 // self invoking function wrapper
 (function () {
-        // place the new function, rHTML, in the CSSAssist namespace
+        // place the new function, replace, in the CSSAssist namespace
         // and specify the parameters it should expect
-        CSSAssist.fn.rHTML = function (regex, value, deep) {
+        CSSAssist.fn.replace = function (regex, value, deep) {
         		// ensure deep is set
         		var deep = (deep) ? deep : false;
 
