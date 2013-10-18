@@ -53,7 +53,6 @@ CSSAssist([selector])
 Returns a collection of elements matching the given selector.  Selectors must adhere to the CSS selector specification
 
 ```javascript
-CSSAssist.version                   // (np parens) returns the CSSAssist version
 CSSAssist()                         // selects nothing, returns an empty CSSAssist object
 CSSAssist(window.document)          // selects the document object
 CSSAssist('*')                      // selects all nodes in the document
@@ -72,6 +71,7 @@ For more information on CSS selectors:
 The following properties are also supported on the CSSAssist object.
 
 ```javascript
+CSSAssist.version               // (np parens) returns the CSSAssist version
 // for a given selector
 CSSAssist(selector).length      // return the number of items in the selected context
 CSSAssist(selector)[n]          // return the nth (0 based) element in the selected context
