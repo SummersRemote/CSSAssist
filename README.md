@@ -31,7 +31,7 @@ If you are installing extensions, include them as well
 <script type="text/javascript" src="cssassist.replace.js"></script>
 ```
 
-Browser Support includes all modern mobile, table, and desktop browsers.  The caveat, as always, is Internet Explorer.  All version of IE 9+ are fully tested and supported.  Limited support for IE 8 is provided by including the ie8shim.js file found in the src directory (less than 400 bytes minified, 250 bytes gzipped).
+Browser Support includes all modern mobile, tablet, and desktop browsers.  The caveat, as always, is Internet Explorer.  All version of IE 9+ are fully tested and supported.  Limited support for IE 8 is provided by including the ie8shim.js file found in the src directory (less than 400 bytes minified, 250 bytes gzipped).
 
 The API
 =======
