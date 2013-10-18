@@ -1,73 +1,43 @@
 CSSAssist v2
 ============
 
-> "Eagles come in all shapes and sizes, but you will recognize them chiefly by their attitudes." - E.F. Schumacher
+CSSAssist is lean JavaScript library for manipulating CSS and the document object model.  It uses CSS selectors to select elements and provides a minimal set of chainable operations.  CSSAssist is intended for all modern mobile, tablet, and desktop browsers.
 
+Features
+- Standalone, no external dependencies
+- Less than 3 kb minified, 1 kb gzipped
+- Modular and extensible
+- Designed for mobile and desktop
 
-CSSAssist v2 is a lean (3kb minified, 1kb gzipped), extensible JavaScript library which provides a lightweight wrapper around the JavaScript [querySelector method](https://developer.mozilla.org/en-US/docs/Web/API/Document.querySelectorAll) and a handful of operations for manipulating [CSS](http://en.wikipedia.org/wiki/Cascading_Style_Sheets).  CSSAssist is intended for modern mobile, tablet, and desktop browsers and works well on recent versions of all major dektop and mobile browsers including IE 9+.  If you require support for older browsers or a larger feature set, I highly recomment the excellent [jQuery](http://jquery.com/) and [AngularJS](http://angularjs.org/) projects.
+Sneak peek
+-------
+```javascript
+// select all img tags and add the 'border' and 'shadow' classes to them
+CSSAssist('img').addClass('border shadow');
 
-Provided Methods
------------------
-Chainable Methods
-- forEach
-- hasClass, addClass, removeClass, toggleClass
-- setStyle, setAttr
-- addListener, removeListener
-- unique, union, intersects, difference
+// select every 3rd <p> node of each <div> node and set the text color to red
+CSSAssist('div > p:nth-child(3n)').setStyle('color', 'red');
+```
 
-Non-chainable/utility methods
-- makeArray
-- loadCSS, createCSS
-
-Use
-===
-
+Installation and Browser Support
+------------
 Include the CSSAssist library by adding the following script tag near the end of your document
-
 ```html
 <script type="text/javascript" src="cssassist.js"></script>
 ```
-
-CSSAssist(selector[, context])
-------------------------------
-
-CSSAssist provides a [fluent API](http://en.wikipedia.org/wiki/Fluent_interface) similiar to jQuery and relies on the CSS selector syntax for selecting DOM elements. The CSSAssist object accepts a selector and an optional context (e.g. a reference to a subcontext in the current document or an iFrame).
-
-```javascript
-CSSAssist()                         // selects nothing, returns an empty CSSAssist object
-CSSAssist(window.document)          // selects the document object
-CSSAssist('*')                      // selects all nodes in the document
-CSSAssist('p.myAwesomeClass')       // selects all <p> nodes with the class .myAwesomeClass
-CSSAssist('body > div')             // selects all <div> nodes that are a child of <body>
-CSSAssist('div > p:nth-child(3n)')  // selects every 3rd <p> node of each <div> node
-
-var frameDoc = document.getElementById ("myFrame").contentWindow.document;
-CSSAssist('a', frameDoc)            // selects all <a> nodes in document contained in "myFrame"
-```
-CSS selector and property support may vary by browser - check out [caniuse.com](http://caniuse.com/#cats=CSS) for supported configurations.
-
-For more information on CSS selectors:
-
-* [W3Schools Selector Reference](http://www.w3schools.com/cssref/css_selectors.asp)
-* [MDN reference on :pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes)
-* [The W3C Selector Level 3 Spec](http://www.w3.org/TR/css3-selectors/)
-
-Properties
-=============
-The following properties are supported on the CSSAssist object
-
-```javascript
-CSSAssist.version               // returns the version of CSSAssist in use
-
-// for a given selector
-CSSAssist(selector).length      // return the number of items in the selected context
-CSSAssist(selector)[n]          // return the nth (0 based) item in the selected context (item will be a DOM node)
+If you are installing extensions, include them as well
+```html
+<script type="text/javascript" src="cssassist.js"></script>
+<script type="text/javascript" src="cssassist.replace.js"></script>
 ```
 
-Methods
+Browser Support includes all modern mobile, table, and desktop browsers.  The caveat, as always, is Internet Explorer.  All version of IE 9+ are fully tested and supported.  Limited support for IE 8 is provided by including the ie8shim.js file found in the src directory (less than 400 bytes minified, 250 bytes gzipped).
+
+The API
 =======
+CSSAssist provides a [fluent or chainable API](http://en.wikipedia.org/wiki/Fluent_interface) that will be familiar to users of [jQuery](http://www.jquery.com) (though not compatible).
 
-Methods which accept a list of values will accept either an array of string values or a space delimited string of values. For example, each of the following hasClass() calls will return the same result.  Additionally, most methods will accept an optional context.
+Methods which accept a list of values will accept either an array of string values or a space delimited string of values. For example, each of the following hasClass() calls will return the same result.
 
 ```javascript
 var asString = 'myAwesomeClass someOtherClass';
@@ -78,55 +48,85 @@ CSSAssist('div').hasClass(asArray);
 CSSAssist('div').hasClass('myAwesomeClass someOtherClass');
 ```
 
-hasClass([values[, context]])
+CSSAssist([selector])
+----------------------
+Returns a collection of elements matching the given selector.  Selectors must adhere to the CSS selector specification
+
+```javascript
+CSSAssist.version                   // (np parens) returns the CSSAssist version
+CSSAssist()                         // selects nothing, returns an empty CSSAssist object
+CSSAssist(window.document)          // selects the document object
+CSSAssist('*')                      // selects all nodes in the document
+CSSAssist('p.myAwesomeClass')       // selects all <p> nodes with the class .myAwesomeClass
+CSSAssist('body > div')             // selects all <div> nodes that are a child of <body>
+CSSAssist('div > p:nth-child(3n)')  // selects every 3rd <p> node of each <div> node
+```
+CSS selector and property support may vary by browser - check out [caniuse.com](http://caniuse.com/#cats=CSS) for supported configurations.
+
+For more information on CSS selectors:
+
+* [W3Schools Selector Reference](http://www.w3schools.com/cssref/css_selectors.asp)
+* [MDN reference on :pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes)
+* [The W3C Selector Level 3 Spec](http://www.w3.org/TR/css3-selectors/)
+
+The following properties are also supported on the CSSAssist object.
+
+```javascript
+// for a given selector
+CSSAssist(selector).length      // return the number of items in the selected context
+CSSAssist(selector)[n]          // return the nth (0 based) element in the selected context
+```
+
+hasClass([values])
 -------------------------------
-The hasClass() method return true if and only if each node in the context has each class in the values list.  For instance
+The hasClass() method returns true if and only if each node in the context has each class in the values list.
 
 ```javascript
 CSSAssist('div').hasClass()                                 // divs must NOT contain any classes
 CSSAssist('div').hasClass('myAwesomeClass')                 // divs must contain myAwesomeClass
-CSSAssist('div').hasClass('myAwesomeClass myOtherClass')    // divs must contain both myAwesomeClass and myOtherClass
+CSSAssist('div').hasClass('myAwesomeClass myOtherClass')    // divs must contain myAwesomeClass AND myOtherClass
 ```
 
-addClass(values[, context])
+addClass(values)
 --------------------
-The addClass() method adds each class in the values list to each node in the context.  addClass() does NOT add duplicates. For example,
+The addClass() method adds each class in the values list to each node in the context. The addClass() will NOT add duplicates.
 
 ```javascript
-CSSAssist('div').addClass('myAwesomeClass')             // add myAwesome class to all divs
-CSSAssist('div.foo').addClass('aClass bClass')          // add aClass and bClass to all divs which have the class foo
+CSSAssist('div').addClass('myAwesomeClass')         // add myAwesome class to all divs
+CSSAssist('div').addClass('aClass bClass')          // add aClass and bClass to all divs
 ```
 
-removeClass([values[, context]])
+removeClass([values])
 -----------------------
-The removeClass() method removes each class in classList from each node in the context. For example,
+The removeClass() method removes each class in values from each node in the context.
 
 ```javascript
-CSSAssist('.bar').removeClass()                     // remove all classes from all nodes with .bar class (.bar inclusive)
-CSSAssist('div').removeClass('myAwesomeClass')      // remove myAwesomeClass from all divs
+CSSAssist('div').removeClass()                                  // removes all classes from all divs
+CSSAssist('div').removeClass('myAwesomeClass')                  // remove myAwesomeClass from all divs
+CSSAssist('div').removeClass('myAwesomeClass myOtherClass')     // remove myAwesomeClass AND myOtherClass from all divs
 ```
 
-toggleClass(values[, context])
+toggleClass(values)
 ----------------------
-The toggleClass() method toggles each class in classList for each node in the context. For example,
+The toggleClass() method toggles each class in classList for each node in the context.
 
 ```javascript
-CSSAssist('div').toggleClass('myAwesomeClass')      // add myAwesome class to every div which did not alread have it,
-                                                    // and remove myAwesomeClass from every node which already had it.
+CSSAssist('div').toggleClass('myAwesomeClass')      // add myAwesomeClass to every div which did not already have it
+                                                    // AND remove myAwesomeClass from every node which did
 ```
 
-setStyle(property[,value[, context]])
+setStyle(property[,value])
 ---------------------
-The setStyle() method will set or clear the specified style property (only one) for each node in the context.
+The setStyle() method will set or clear the specified style property for each node in the context.
 
 ```javascript
-CSSAssist('span').setStyle('color')             // clears the color style on all spans
-CSSAssist('p.big').setStyle('fontSize', '2em')  // sets the font size to 2em for all paragraphs with the class big
+CSSAssist('p').setStyle('color')                // clears the color style on all paragraphs
+CSSAssist('p').setStyle('fontSize', '2em')      // sets the font size to 2em for all paragraphs
 ```
 
-setAttr(attr[, value[, context]])
+setAttr(attr[, value])
 ---------------------
-The setAttr() method will set or remove the specified attribute (only one) for each node in the context.
+The setAttr() method will set or remove the specified attribute for each node in the context.
 
 ```javascript
 CSSAssist('*').setAttr('style')                     // remove the style attributes from all nodes
@@ -134,9 +134,60 @@ CSSAssist('span').setAttr('data-myData')            // removes the attribute dat
 CSSAssist('span').setAttr('data-myData', 'some good data')  // sets the attribute data-myData to 'some good data' for all spans
 ```
 
+unique()
+-----------------
+Ensures that duplicates are removed from the current CSSAssist object.  This method is used internally, but may be useful to developers creating extensions.
+
+```javascript
+CSSAssist('div').unique()                     // removes duplicate nodes from the context
+```
+
+union(context)
+-----------------
+Returns the union (concatenation) of two CSSAssist contexts and ensures that there are no duplicates. 
+
+```javascript
+// returns all 'div > p' nodes
+CSSAssist('div > p:nth-child(odd)').union(CSSAssist('div > p:nth-child(even)'));
+
+// would also return all 'div > p' nodes as it removes duplicates
+CSSAssist('div > p').union(CSSAssist('div > p:nth-child(even)'));
+```
+
+intersects(context)
+----------------------
+Returns the intersection of two CSSAssist contexts and ensures that there are no duplicates.
+
+```javascript
+// returns only the EVEN nodes of 'div > p'
+CSSAssist('div > p').intersects(CSSAssist('div > p:nth-child(even)'));
+```
+
+difference(context)
+----------------------
+Returns the difference of two CSSAssist contexts and ensures that there are no duplicates.
+
+```javascript
+// returns only the ODD nodes of 'div > p'
+CSSAssist('div > p').difference(CSSAssist('div > p:nth-child(even)'));
+```
+
+forEach(func)
+----------------------
+A utility method for iterating over each item in the current context.  Callback functions are passed the current item and index.
+
+```javascript
+// print the context item's tag name to the console
+CSSAssist('.myAwesomeClass').forEach(
+    function(item, i) {
+        console.log('Item ' + i + ' is a(n) ' + item.nodeName)
+    }
+);
+```
+
 loadCSS(url)
 -----------------
-The loadCSS() method loads an external CSS file (referenced by url) by creating and inserting an appropriate &lt;script&gt; element.  The context is not relevant and should be called like this
+The loadCSS() method loads an external CSS file (referenced by url) by creating and inserting an appropriate &lt;script&gt; element. Note that the context is not relevant, and this method should be called without parentheses.
 
 ```javascript
 CSSAssist.loadCSS('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.css');
@@ -144,7 +195,7 @@ CSSAssist.loadCSS('//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.0/normalize.cs
 
 createCSS(styles)
 ----------------
-The createCSS() method loads a programmatically constructed stylesheet. The context is not relevant and should be called as
+The createCSS() method loads a programmatically constructed stylesheet. Note that the context is not relevant, and this method should be called without parentheses.
 
 ```javascript
 var myStyles = "body { background-color: red;} div { background-color: yellow;}";
@@ -153,7 +204,7 @@ CSSAssist.createCSS(myStyles);
 
 Event Listeners
 ===============
-The cssassist.js file also includes two methods for binding custom event handlers to DOM events.  These methods wrap the add/removeEventListener methods such that the provided listener is added to each node in the context.
+CSSAssist also provides two methods for binding custom event handlers to DOM events.  These methods wrap the add/removeEventListener methods such that the provided listener is added to each node in the context.
 The following links are good resources for events:
 * [MDN Reference fo DOM events](https://developer.mozilla.org/en-US/docs/Web/Reference/Events)
 * [MDN Reference for window events](https://developer.mozilla.org/en-US/docs/Web/API/Window#Event_handlers)
@@ -180,30 +231,16 @@ CSSAssist('div.makeInvisible').removeListener('click', myListener );
 ```
 removes the event listener, myListener, from the click event of all &lt;div&gt; nodes with the class "makeInvisible".  The event will no longer fire when the &lt;div&gt; is clicked.
 
-Set Operations 
-==============
-The cssassist.js file also includes the following set operations.  The resulting CSSAssist object of each of these methods will NOT contain deuplicates.
-
-unique([context])
------------------
-Ensures that duplicates are removed from the current CSSAssist object.  This method is used internally, but may be useful if the developer is manually adding items to the context.
-
-
-union([context])
------------------
-
-intersects([context])
-----------------------
-
-difference([context])
-----------------------
-
-Plugins
-=======
-CSSAssist can be extended by providing new methods on the CSSAssist prototype.  When possible, return "this" to enable the method to be chained.
+Extensions
+===========
+CSSAssist can be extended by providing new methods on the CSSAssist prototype.
+- Wrap extension in self invoking functions.
+- Pass in the CSSAssist object, esp if you rename it within your method.
+- When possible, return "this" to enable the method to be chained.
+- Name the JavaScript file 'cssassist.&lt;methodName&gt;.js'
 
 ```javascript
-;(function (CSSAssist) {
+(function (CSSAssist) {
     CSSAssist.fn.makeRed = function () {         // add "makeRed" to the CSSAssist prototype
         for (var i = 0; i < this.length; i++) {  // loop over each node in the context
                 this[i].style.color = 'red';     // do something
@@ -211,13 +248,17 @@ CSSAssist can be extended by providing new methods on the CSSAssist prototype.  
         return this;                             // return "this"
     }
 })(CSSAssist);
+
+// calling the extension
+CSSAssist('p').makeRed();
 ```
+The extensions directory contains an example in the file cssassist.replace.js.  The replace method accepts a regular expression and replacement value and is can optionally iterate over all descendants or only the immediate children of each context node.
 
 Unit Testing
---------------
+============
 Unit tests are written using the [Jasmine Test Framework](http://pivotal.github.io/jasmine/).
 
-[CSSAssist Test Results](https://rawgithub.com/metatribal/CSSAssist/master/test/SpecRunner.html)
+[CSSAssist test results](https://rawgithub.com/metatribal/CSSAssist/master/test/SpecRunner.html)
 
 License
 =======
