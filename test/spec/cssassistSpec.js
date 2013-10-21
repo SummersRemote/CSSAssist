@@ -4,7 +4,7 @@ describe("CSSAssist Test Setup", function() {
 	it("Setting up html fixtures...", function () {
 		fixture = document.body.appendChild(document.createElement('div')); 
 		fixture.setAttribute('id','cssassist');
-		// these children should have no class
+		// these children should have no classes
 		fixture.appendChild(document.createElement('p'));
 		fixture.appendChild(document.createElement('p'));
 		fixture.appendChild(document.createElement('p'));
@@ -50,11 +50,15 @@ describe("CSSAssist hasClass", function() {
     it("matches 'no classes' when given empty string, ''", function() {
     	obj = CSSAssist('#cssassist > p').hasClass('');
     	expect(obj).toBe(true);
+        obj = CSSAssist('#cssassist').hasClass('');
+        expect(obj).toBe(false);
     });
 
     it("matches 'no classes' when given no parameter", function() {
     	obj = CSSAssist('#cssassist > p').hasClass();
     	expect(obj).toBe(true);
+        obj = CSSAssist('#cssassist').hasClass();
+        expect(obj).toBe(false);
     });
 
     it("matches a single class", function() {

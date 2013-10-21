@@ -87,8 +87,8 @@ var CSSAssist = (function () {
                  * e.g. CSSAssist('div').hasClass('myAwesomeStyle');
                  */
                 hasClass: function (values) {
-                        if (!values) values = ' ';
-                        var values = CSSAssist.makeArray(values);
+                        values = values || ' ';
+                        values = CSSAssist.makeArray(values);
                         for (var i = 0; i < this.length; ++i) {
                                 var className = (' ' + this[i].className + ' ').replace(rSpace, ' ');
                                 for (var j = 0; j < values.length; ++j) {
@@ -106,7 +106,7 @@ var CSSAssist = (function () {
                  */
                 addClass: function (values) {
                         if (values) {
-                                var values = CSSAssist.makeArray(values);
+                                values = CSSAssist.makeArray(values);
                                 this.forEach(
                                         function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
@@ -124,7 +124,7 @@ var CSSAssist = (function () {
                  * e.g. CSSAssist('div').removeClass('myAwesomeStyle');
                  */
                 removeClass: function (values) {
-                        if (values) values = CSSAssist.makeArray(values);
+                        values = CSSAssist.makeArray(values) || null;
                         this.forEach(
                                 function (item) {
                                         if (values) {
@@ -151,7 +151,7 @@ var CSSAssist = (function () {
                  */
                 toggleClass: function (values) {
                         if (values) {
-                                var values = CSSAssist.makeArray(values);
+                                values = CSSAssist.makeArray(values);
                                 this.forEach(
                                         function (item) {
                                                 for (var j = 0; j < values.length; ++j) {
@@ -201,32 +201,47 @@ var CSSAssist = (function () {
                         return this;
                 },
 
+                replace: function(regex, value) {
+                    if (regex && value) {
+                        this.forEach(
+                            function(item) {
+                                var children = item.childNodes;
+                                for (var i=0; i < children.length; i++) {
+                                    if (3 === children[i].nodeType) {
+                                        if (children[i].nodeValue != null) children[i].nodeValue = children[i].nodeValue.replace(regex, value);
+
+                                    }
+                                }
+                            }
+                        )
+                    }
+                    return this;
+                },
+
                 /**
                  * Set operations (as plugins)
                  */
 
                 // unique function (returns an array not a CSSAssist object)
-                unique: function () {
-                        var unique = [];
-                        for (var i = 0; i < this.length; i += 1) {
-                                if (unique.indexOf(this[i]) < 0) {
-                                        unique.push(this[i]);
+                unique: function (arrayObj) {
+                        var ret = arrayObj || this,
+                            unique = [];
+                        for (var i = 0; i < ret.length; i += 1) {
+                                if (unique.indexOf(ret[i]) < 0) {
+                                        unique.push(ret[i]);
                                 }
                         }
-                        return CSSAssist(unique);
+                        return CSSAssist(ret);
                 },
 
                 // union (brute force concat)
                 union: function (arrayObj) {
                         if (arrayObj) {
-                                var ret = [];
-                                for (var i = 0; i < this.length; ++i) {
-                                        ret.push(this[i]);
-                                }
+                                var ret = [].slice.call(this,0);
                                 for (var i = 0; i < arrayObj.length; ++i) {
                                         ret.push(arrayObj[i]);
                                 }
-                                return CSSAssist(ret).unique();
+                                return this.unique(ret);
                         }
                         return this;
                 },
@@ -245,7 +260,7 @@ var CSSAssist = (function () {
                                                 }
                                         }
                                 );
-                                return CSSAssist(ret).unique();
+                                return CSSAssist(ret);
                         }
                         return this;
                 },
@@ -272,10 +287,10 @@ var CSSAssist = (function () {
                  */
                 addListener: function (type, listener, useCapture) {
                         if (type && listener) {
-                                var capture = useCapture || false;
+                                useCapture = useCapture || false;
                                 this.forEach(
                                         function (item) {
-                                                if (item.addEventListener) item.addEventListener(type, listener, capture);
+                                                if (item.addEventListener) item.addEventListener(type, listener, useCapture);
                                                 else if (item.attachEvent) item.attachEvent( "on" + type, listener );
                                                 else return false;
                                         }
@@ -289,10 +304,10 @@ var CSSAssist = (function () {
                  */
                 removeListener: function (type, listener, useCapture) {
                         if (type && listener) {
-                                var capture = useCapture || false;
+                                useCapture = useCapture || false;
                                 this.forEach(
                                         function (item) {
-                                                if (item.addEventListener) item.removeEventListener(type, listener, capture);
+                                                if (item.addEventListener) item.removeEventListener(type, listener, useCapture);
                                                 else if (item.attachEvent) item.detachEvent( "on" + type, listener );
                                                 else return false;
                                         }
