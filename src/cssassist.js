@@ -201,25 +201,8 @@ var CSSAssist = (function () {
                         return this;
                 },
 
-                replace: function(regex, value) {
-                    if (regex && value) {
-                        this.forEach(
-                            function(item) {
-                                var children = item.childNodes;
-                                for (var i=0; i < children.length; i++) {
-                                    if (3 === children[i].nodeType) {
-                                        if (children[i].nodeValue != null) children[i].nodeValue = children[i].nodeValue.replace(regex, value);
-
-                                    }
-                                }
-                            }
-                        )
-                    }
-                    return this;
-                },
-
                 /**
-                 * Set operations (as plugins)
+                 * Set operations
                  */
 
                 // unique function (returns an array not a CSSAssist object)

@@ -75,7 +75,7 @@ replace plugin operating on a list
 <!-- load cssassist -->
 <script src="../src/cssassist.js"></script>
 <!-- load a plugin -->
-<!-- <script src="../extensions/cssassist.replace.js"></script> -->
+<script src="../extensions/cssassist.dom.js"></script>
 <script type="text/javascript">
 
 		// header handler
@@ -120,7 +120,7 @@ replace plugin operating on a list
 			var matchText = document.getElementById("matchText").value;
 			var replaceText = document.getElementById("replaceText").value;
 			var pattern = new RegExp(matchText,'g');
-			$css('div.example > p').rHTML(pattern, replaceText);
+			$css('div.example > p').regex(pattern, replaceText);
 			
 		});		
 		
@@ -145,36 +145,14 @@ replace plugin operating on a list
 		});
 
 
-		// plugin example
-
-
-        // CSSAssist.fn.replace = function (regex, value, deep) {
-        // 		var deep = (deep) ? deep : false;
-
-        // 		var repl = function(node) {
-        // 			if (node.nodeValue != null) {
-        //             	node.nodeValue = node.nodeValue.replace(regex, value);
-        //             }
-        // 		}
-
-        // 		if (deep) {
-        // 			this.forEach(
-        //         		function (item, i) {
-        //         			this.walk(item, repl)
-        //         		}
-        //         	);
-        // 		} else {
-        // 			// need to grab children text nodes....
-        // 			this.forEach(repl)
-        // 		}
-
-        //         return this;
-        // };
-
-
 		var pattern = /item/g;
-		$css('#eg03 li').replace(pattern, "thing");
+		$css('#eg03 li').regex(pattern, "thing");
 		
+		$css('#eg03 ul').append('<li>A new item</li>')
+
+		$css('#eg03 li').prepend('---').regex(/thing/, 'item').append('...')
+
+		//$css('#eg03 li').remove();
 
 </script>
 </body>
