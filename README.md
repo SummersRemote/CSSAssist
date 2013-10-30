@@ -252,7 +252,7 @@ CSSAssist can be extended by providing new methods on the CSSAssist prototype.
 // calling the extension
 CSSAssist('p').makeRed();
 ```
-The extensions directory contains an example extension in the file cssassist.replace.js.  The replace method accepts a regular expression and replacement value and is can optionally iterate over all descendants or only the immediate children of each context node.
+The extensions directory contains an example extension in the file cssassist.dom.js.  This plugin provides methods for prepending, appending, and removing DOM nodes as well as a method for replacing text in the current context.
 
 Unit Testing
 ============
