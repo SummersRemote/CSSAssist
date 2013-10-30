@@ -1,7 +1,7 @@
 CSSAssist v2
 ============
 
-CSSAssist is lean JavaScript library for manipulating CSS and the document object model.  It uses CSS selectors to select elements and provides a minimal set of chainable operations.  CSSAssist is intended for all modern mobile, tablet, and desktop browsers.
+CSSAssist is a lean JavaScript library for manipulating CSS and the document object model.  It uses CSS selectors to select elements and provides a minimal set of chainable operations.  CSSAssist is intended for all modern mobile, tablet, and desktop browsers.
 
 Features
 - Standalone, no external dependencies
@@ -252,7 +252,7 @@ CSSAssist can be extended by providing new methods on the CSSAssist prototype.
 // calling the extension
 CSSAssist('p').makeRed();
 ```
-The extensions directory contains an example in the file cssassist.replace.js.  The replace method accepts a regular expression and replacement value and is can optionally iterate over all descendants or only the immediate children of each context node.
+The extensions directory contains an example extension in the file cssassist.replace.js.  The replace method accepts a regular expression and replacement value and is can optionally iterate over all descendants or only the immediate children of each context node.
 
 Unit Testing
 ============
