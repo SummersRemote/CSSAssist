@@ -1,10 +1,8 @@
 /**
  * This is an example plugin for CSSAssist.
  *
- * This plugin accepts a regular expression and a replacement string
- * and executes the expression against the textnode of each item
- * in the current context. If deep = true, it will also process
- * the text nodes of each items descendants
+ * This plugin provides the following functions on CSSAssist collections
+ * prepend, append, remove, and regex
  */
 // self invoking function wrapper
 (function () {
