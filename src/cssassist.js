@@ -19,17 +19,23 @@
  * CSSAssist provides a minimal set of methods for working with CSS
  * Browser support is limited by the availability of
  *            querySelector (http://caniuse.com/queryselector)
- *            add/removeEventListener (ie9+, most others support)
+ *            add/removeEventListener (IE 9+, most others support)
  *
  * these are the chainable methods
  *      init, forEach, hasClass, addClass, removeClass, toggleClass
  *      setStyle, setAttr, addListener, removeListener
  *
- * additional methods supplied by plugin (chainable)
+ * additional methods supplied by inline plugin (chainable)
  *      unique, union, intersects, difference
  *
  * non-chainable methods
  *      makeArray, loadCSS, createCSS
+ * 
+ * notes:
+ * 1. There is no getAttribute function as it is already a DOM function and makes little sense for multiple objects
+ * 2. There are no media query helpers as media queries can be accessed using the window.matchMedia method (IE 10+)
+ * 
+ * 
  */
 // create a self-invoking function
 var CSSAssist = (function () {
