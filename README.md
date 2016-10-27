@@ -256,7 +256,7 @@ The extensions directory contains an example extension in the file cssassist.dom
 
 Unit Testing
 ============
-Unit tests are written using the [Jasmine Test Framework](http://pivotal.github.io/jasmine/).
+Unit tests are written using the [Jasmine Test Framework](http://jasmine.github.io/).
 
 [CSSAssist test results](https://rawgithub.com/metatribal/CSSAssist/master/test/SpecRunner.html)
 
